@@ -1,0 +1,111 @@
+export const booksData = [
+        {
+            id: 1,
+            title: "The Wings",
+            author: "Yi Sang",
+            cover: "https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1186314830i/1645925.jpg",
+        },
+        {
+            id: 2,
+            title: "Faust",
+            author: "Johann Wolfgang von Goethe",
+            cover: "https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1758424096i/406373.jpg",
+        },        
+        {
+            id: 3,
+            title: "Don Quixote",
+            author: "Miguel de Cervantes",
+            cover: "https://m.media-amazon.com/images/I/81-W5+kt+aL._SL1500_.jpg",
+        },        
+        {
+            id: 4,
+            title: "Hell Screen",
+            author: "Ryūnosuke Akutagawa",
+            cover: "https://m.media-amazon.com/images/I/613KkAXRB1L._SY425_.jpg",
+        },
+        {
+            id: 5,
+            title: "The Stranger",
+            author: "Albert Camus",
+            cover: "https://m.media-amazon.com/images/I/617WkdpG8xL._SL1200_.jpg",
+        },
+        {
+            id: 6,
+            title: "Dream of the Red Chamber",
+            author: "Cao Xueqin",
+            cover: "https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1645905884i/535739.jpg",
+        },
+        {
+            id: 7,
+            title: "Wuthering Heights",
+            author: "Emily Brontë",
+            cover: "https://m.media-amazon.com/images/I/51a1yivE4HL._SY445_SX342_ML2_.jpg",
+        },
+        {
+            id: 8,
+            title: "Moby Dick",
+            author: "Herman Melville",
+            cover: "https://m.media-amazon.com/images/I/61PsTdy3x0L._SL1499_.jpg",
+        },
+        {
+            id: 9,
+            title: "Crime and Punishment",
+            author: "Fyodor Dostoevsky",
+            cover: "https://m.media-amazon.com/images/I/61we7LSlLYL._SL1499_.jpg",
+        },
+        {
+            id: 10,
+            title: "Demian",
+            author: "Hermann Hesse",
+            cover: "https://m.media-amazon.com/images/I/51UhsXRk7KL._SL1360_.jpg",
+        },
+        {
+            id: 11,
+            title: "The Odyssey",
+            author: "Homer",
+            cover: "https://m.media-amazon.com/images/I/81+KYk14qdL._SL1500_.jpg",
+        },
+        {
+            id: 12,
+            title: "The Metamorphosis",
+            author: "Franz Kafka",
+            cover: "https://m.media-amazon.com/images/I/71NolPFccdL._SL1200_.jpg",
+        },
+                {
+            id: 13,
+            title: "The Divine Comedy",
+            author: "Dante Alighieri",
+            cover: "https://m.media-amazon.com/images/I/91nRZwNtK2L._SL1500_.jpg",
+        },
+        {
+            id: 14,
+            title: "The Golden Bough",
+            author: "James George Frazer",
+            cover:
+            "https://m.media-amazon.com/images/I/61HQexgoQoL._SL1422_.jpg",
+        },
+        {
+            id: 15,
+            title: "The Great Gatsby",
+            author: "F. Scott Fitzgerald",
+            cover: "https://m.media-amazon.com/images/I/81TLiZrasVL._SL1500_.jpg",
+        },
+        {
+            id: 16,
+            title: "To Kill a Mockingbird",
+            author: "Harper Lee",
+            cover: "https://images-na.ssl-images-amazon.com/images/I/81OthjkJBuL.jpg",
+        },
+        {
+            id: 17,
+            title: "1984",
+            author: "George Orwell",
+            cover: "https://images-na.ssl-images-amazon.com/images/I/71kxa1-0mfL.jpg",
+        },
+        {
+            id: 18,
+            title: "Pride and Prejudice",
+            author: "Jane Austen",
+            cover: "https://m.media-amazon.com/images/I/412bjj40hoL._SY445_SX342_ML2_.jpg",
+        },
+    ];
