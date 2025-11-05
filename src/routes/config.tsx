@@ -1,9 +1,11 @@
-import Dashboard from "../pages/Dashboard";
-import Books from "../features/books/pages/Books";
-import BookDetail from "../features/bookdetails/pages/BookDetail";
-import AddNewBook from "@/features/addbook/pages/AddNewBook";
+import React from "react";
 
-const username = "Admin"; // You can move this to context or props later
+const Dashboard = React.lazy(() => import("../pages/Dashboard"));
+const Books = React.lazy(() => import("../features/books/pages/Books"));
+const BookDetail = React.lazy(() => import("../features/bookdetails/pages/BookDetail"));
+const AddNewBook = React.lazy(() => import("@/features/addbook/pages/AddNewBook"));
+
+const username = "Admin"; 
 
 export const routes = [
     {
@@ -21,5 +23,5 @@ export const routes = [
     {
         path: "/books/new",
         element: <AddNewBook />,
-    },
+},
 ];
