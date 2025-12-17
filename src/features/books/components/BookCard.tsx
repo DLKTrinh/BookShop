@@ -10,14 +10,14 @@ interface BookCardProps {
 const BookCard: React.FC<BookCardProps> = ({ id, title, author, cover }) => {
     return (
         <Link
-        to={`/books/${id}`}
-        className="block bg-gray-800 rounded-xl overflow-hidden shadow-md hover:shadow-lg transition-transform transform hover:-translate-y-1 border border-gray-700"
+            to={`/books/${id}`}  // Fixed: Changed to= to to={
+            className="block bg-gray-800 rounded-xl overflow-hidden shadow-md hover:shadow-lg transition-transform transform hover:-translate-y-1 border border-gray-700 select-none"
         >
             <div className="relative aspect-[2/3] w-full">
                 <img
-                src={cover}
-                alt={title}
-                className="w-full h-full object-cover rounded-t-xl"
+                    src={cover}
+                    alt={title}
+                    className="w-full h-full object-cover rounded-t-xl"
                 />
             </div>
             <div className="py-1 px-3 text-center flex flex-col justify-between h-20">
