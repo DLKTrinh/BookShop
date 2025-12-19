@@ -2,7 +2,7 @@ import React from "react";
 
 const Dashboard = React.lazy(() => import("../pages/Dashboard"));
 const Books = React.lazy(() => import("../features/books/pages/Books"));
-const BookDetail = React.lazy(() => import("../features/bookdetails/pages/BookDetail"));
+const BookDetail = React.lazy(() => import("../features/books/pages/BookDetail"));
 const AddNewBook = React.lazy(() => import("@/features/addbook/pages/AddNewBook"));
 
 const username = "Admin"; 

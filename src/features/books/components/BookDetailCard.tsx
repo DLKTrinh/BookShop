@@ -1,5 +1,5 @@
-import { Card, CardContent } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/shared/components/ui/card";
+import { Button } from "@/shared/components/ui/button";
 import { BookOpen, Calendar, User, Tag, Factory, Layers } from "lucide-react";
 import placeholder from "@/assets/placeholder.png";
 

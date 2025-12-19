@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
-import Layout from "../../../components/Layout";
+import { useSearchParams } from "react-router-dom";
+import Layout from "@/shared/components/Layout";
 import BookCard from "../components/BookCard";
 import AddBookCard from "../components/AddBookCard";
 import SearchBar from "../components/SearchBar";
@@ -7,18 +8,39 @@ import BookFilter from "../components/BookFilter";
 import BookSort from "../components/BookSort";
 import PageControl from "../components/PageControl";
 import placeholder from "../../../assets/placeholder.png";
-import { useBooks } from "@/hooks/useBooks";
-import { useDebounce } from "@/hooks/useDebounce";
+import { useBooks } from "@/shared/hooks/useBooks";
+
+function useDebounce<T>(value: T, delay: number): T {
+  const [debouncedValue, setDebouncedValue] = useState<T>(value);
+
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setDebouncedValue(value);
+    }, delay);
+
+    return () => {
+      clearTimeout(handler);
+    };
+  }, [value, delay]);
+
+  return debouncedValue;
+}
 
 const Books: React.FC<{ username: string }> = ({ username }) => {
-    const [page, setPage] = useState(1);
-    const [searchQuery, setSearchQuery] = useState("");
-    const [sortOption, setSortOption] = useState("");
-    const [filterOptions, setFilterOptions] = useState<string[]>([]);
+    const [searchParams, setSearchParams] = useSearchParams();
+    
+    // Initialize state from URL parameters
+    const [page, setPage] = useState(Number(searchParams.get('page')) || 1);
+    const [searchQuery, setSearchQuery] = useState(searchParams.get('search') || "");
+    const [sortOption, setSortOption] = useState(searchParams.get('sort') || "");
+    const [filterOptions, setFilterOptions] = useState<string[]>(
+        searchParams.get('fields')?.split(',').filter(Boolean) || []
+    );
     const booksPerPage = 20;
     
     const debouncedSearch = useDebounce(searchQuery, 500);
     
+    // Always include essential fields for display, plus user-selected fields
     const essentialFields = ['_id', 'title', 'author', 'cover'];
     const fieldsToFetch = filterOptions.length > 0 
         ? [...new Set([...essentialFields, ...filterOptions])]
@@ -32,6 +54,19 @@ const Books: React.FC<{ username: string }> = ({ username }) => {
       sort: sortOption || undefined,
     });
     
+    // Update URL when state changes
+    useEffect(() => {
+      const params: Record<string, string> = {};
+      
+      if (page > 1) params.page = page.toString();
+      if (debouncedSearch) params.search = debouncedSearch;
+      if (sortOption) params.sort = sortOption;
+      if (filterOptions.length > 0) params.fields = filterOptions.join(',');
+      
+      setSearchParams(params, { replace: true });
+    }, [page, debouncedSearch, sortOption, filterOptions, setSearchParams]);
+    
+    // Reset to page 1 when search, sort, or filter changes
     useEffect(() => {
       setPage(1);
     }, [debouncedSearch, sortOption, filterOptions]);
@@ -59,9 +94,11 @@ const Books: React.FC<{ username: string }> = ({ username }) => {
     const books = data?.data || [];
     const totalPages = data?.meta?.totalPages || 1;
     const totalBooks = data?.meta?.total || 0;
+    const hasNext = data?.meta?.hasNext || false;
     
     const handlePageChange = (newPage: number) => {
         setPage(newPage);
+        window.scrollTo({ top: 0, behavior: 'smooth' });
     };
 
     const handleSearch = (query: string) => {
@@ -91,6 +128,17 @@ const Books: React.FC<{ username: string }> = ({ username }) => {
                 <div className="mb-4 flex items-center gap-2 flex-wrap">
                     <span className="text-gray-300">
                         Found {totalBooks} book{totalBooks !== 1 ? 's' : ''} matching your search
+                    </span>
+                    
+                    <span className="inline-flex items-center gap-2 px-3 py-1 bg-gray-700 rounded-full text-sm">
+                        Search: "{debouncedSearch}"
+                        <button
+                            onClick={() => setSearchQuery("")}
+                            className="text-gray-400 hover:text-white"
+                            aria-label="Clear search"
+                        >
+                            ✕
+                        </button>
                     </span>
                 </div>
             )}

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Field, FieldLabel } from "@/components/ui/field";
+import { Field, FieldLabel } from "@/shared/components/ui/field";
 
 interface UploadImageProps {
   onImageChange: (file: File | null, preview: string) => void;

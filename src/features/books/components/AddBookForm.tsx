@@ -3,7 +3,7 @@ import {
   Field,
   FieldGroup,
   FieldLabel,
-} from "@/components/ui/field";
+} from "@/shared/components/ui/field";
 import GenreSelector from "./GenreSelector";
 import UploadImage from "./UploadImage";
 

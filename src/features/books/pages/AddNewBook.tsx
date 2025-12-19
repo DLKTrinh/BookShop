@@ -1,5 +1,5 @@
-import Layout from "@/components/Layout";
-import AddBookForm from "../components/AddBookForm";
+import Layout from "@/shared/components/Layout";
+import AddBookForm from "../../books/components/AddBookForm";
 
 export default function AddNewBook() {
   const handleAddBook = (book: any) => {
