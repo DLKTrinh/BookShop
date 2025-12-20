@@ -1,43 +1,41 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 interface SearchBarProps {
   onSearch: (query: string) => void;
-  defaultValue?: string;
+  value: string;
 }
 
-const SearchBar: React.FC<SearchBarProps> = ({ onSearch, defaultValue = "" }) => {
-  const [searchValue, setSearchValue] = useState(defaultValue);
+const SearchBar: React.FC<SearchBarProps> = ({ onSearch, value }) => {
+  const [localValue, setLocalValue] = useState(value);
+  
+  useEffect(() => {
+    setLocalValue(value); // Sync when URL changes (back/forward)
+  }, [value]);
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    onSearch(searchValue.trim());
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newValue = e.target.value;
+    setLocalValue(newValue);
+    onSearch(newValue); // Call immediately, parent will debounce
   };
 
   const handleClear = () => {
-    setSearchValue("");
+    setLocalValue("");
     onSearch("");
   };
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-    setSearchValue(value);
-    // Optional: Real-time search (remove if you want search on submit only)
-    onSearch(value.trim());
-  };
-
   return (
-    <form onSubmit={handleSubmit} className="relative flex items-center gap-2 select-none">
+    <div className="relative flex items-center gap-2 select-none">
       <div className="relative">
         <input
           type="text"
-          value={searchValue}
+          value={localValue}
           onChange={handleChange}
           placeholder="Search books..."
           className="px-4 py-2 pr-10 bg-gray-800 border border-gray-600 rounded-lg 
                      text-white placeholder-gray-400 focus:outline-none 
                      focus:border-blue-500 transition-colors w-64"
         />
-        {searchValue && (
+        {localValue && (
           <button
             type="button"
             onClick={handleClear}
@@ -49,7 +47,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ onSearch, defaultValue = "" }) =>
           </button>
         )}
       </div>
-    </form>
+    </div>
   );
 };
 

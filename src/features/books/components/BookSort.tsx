@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { sortOptions } from "../utils/sortOptions";
 
 interface BookSortProps {
   onSort: (sort: string) => void;
@@ -7,14 +8,6 @@ interface BookSortProps {
 
 const BookSort: React.FC<BookSortProps> = ({ onSort, currentSort }) => {
   const [isOpen, setIsOpen] = useState(false);
-
-  const sortOptions = [
-    { value: "", label: "Default" },
-    { value: "title", label: "Title (A-Z)" },
-    { value: "-title", label: "Title (Z-A)" },
-    { value: "author", label: "Author (A-Z)" },
-    { value: "-author", label: "Author (Z-A)" },
-  ];
 
   const handleSelect = (value: string) => {
     onSort(value);

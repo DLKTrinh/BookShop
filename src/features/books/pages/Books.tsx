@@ -1,4 +1,3 @@
-import { useState, useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
 import Layout from "@/shared/components/Layout";
 import BookCard from "../components/BookCard";
@@ -9,69 +8,96 @@ import BookSort from "../components/BookSort";
 import PageControl from "../components/PageControl";
 import placeholder from "../../../assets/placeholder.png";
 import { useBooks } from "@/shared/hooks/useBooks";
-
-function useDebounce<T>(value: T, delay: number): T {
-  const [debouncedValue, setDebouncedValue] = useState<T>(value);
-
-  useEffect(() => {
-    const handler = setTimeout(() => {
-      setDebouncedValue(value);
-    }, delay);
-
-    return () => {
-      clearTimeout(handler);
-    };
-  }, [value, delay]);
-
-  return debouncedValue;
-}
+import { getIdFromValue, getValueFromId } from "../utils/sortOptions";
 
 const Books: React.FC<{ username: string }> = ({ username }) => {
     const [searchParams, setSearchParams] = useSearchParams();
     
-    // Initialize state from URL parameters
-    const [page, setPage] = useState(Number(searchParams.get('page')) || 1);
-    const [searchQuery, setSearchQuery] = useState(searchParams.get('search') || "");
-    const [sortOption, setSortOption] = useState(searchParams.get('sort') || "");
-    const [filterOptions, setFilterOptions] = useState<string[]>(
-        searchParams.get('fields')?.split(',').filter(Boolean) || []
-    );
+    const page = Number(searchParams.get('page')) || 1;
+    const searchQuery = searchParams.get('search') || "";
+    const sortOption = getValueFromId(searchParams.get('sort') || "default");
+    const filterOptions = searchParams.get('fields')?.split(',').filter(Boolean) || [];
+    
     const booksPerPage = 20;
     
-    const debouncedSearch = useDebounce(searchQuery, 500);
-    
-    // Always include essential fields for display, plus user-selected fields
-    const essentialFields = ['_id', 'title', 'author', 'cover'];
+    // Required fields
+    const requiredFields = ['_id', 'title', 'author', 'cover'];
     const fieldsToFetch = filterOptions.length > 0 
-        ? [...new Set([...essentialFields, ...filterOptions])]
+        ? [...new Set([...requiredFields, ...filterOptions])]
         : undefined;
     
+    // useBooks hook
     const { data, isLoading, isFetching, error } = useBooks({
       page,
       limit: booksPerPage,
-      search: debouncedSearch || undefined,
+      search: searchQuery || undefined,
       fields: fieldsToFetch,
       sort: sortOption || undefined,
     });
     
-    // Update URL when state changes
-    useEffect(() => {
-      const params: Record<string, string> = {};
-      
-      if (page > 1) params.page = page.toString();
-      if (debouncedSearch) params.search = debouncedSearch;
-      if (sortOption) params.sort = sortOption;
-      if (filterOptions.length > 0) params.fields = filterOptions.join(',');
-      
-      setSearchParams(params, { replace: true });
-    }, [page, debouncedSearch, sortOption, filterOptions, setSearchParams]);
+    // URL update handlers
+    const handlePageChange = (newPage: number) => {
+        setSearchParams(prev => {
+            const params = new URLSearchParams(prev);
+            if (newPage > 1) {
+                params.set('page', newPage.toString());
+            } else {
+                params.delete('page');
+            }
+            return params;
+        }, { replace: true });
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    };
     
-    // Reset to page 1 when search, sort, or filter changes
-    useEffect(() => {
-      setPage(1);
-    }, [debouncedSearch, sortOption, filterOptions]);
+    const handleSearch = (query: string) => {
+        setSearchParams(prev => {
+            const params = new URLSearchParams(prev);
+            params.delete('page'); // Reset to page 1
+            if (query.trim()) {
+                params.set('search', query.trim());
+            } else {
+                params.delete('search');
+            }
+            return params;
+        }, { replace: true });
+    };
     
-    if (isLoading)
+    const handleSort = (sort: string) => {
+        setSearchParams(prev => {
+            const params = new URLSearchParams(prev);
+            params.delete('page'); // Reset to page 1
+            const sortId = getIdFromValue(sort);
+            if (sortId !== "default") {
+                params.set('sort', sortId);
+            } else {
+                params.delete('sort');
+            }
+            return params;
+        }, { replace: true });
+    };
+    
+    const handleFilter = (filters: string[]) => {
+        setSearchParams(prev => {
+            const params = new URLSearchParams(prev);
+            params.delete('page'); // Reset to page 1
+            if (filters.length > 0) {
+                params.set('fields', filters.join(','));
+            } else {
+                params.delete('fields');
+            }
+            return params;
+        }, { replace: true });
+    };
+    
+    const handleClearSearch = () => {
+        handleSearch("");
+    };
+    
+    const handleClearFilters = () => {
+        handleFilter([]);
+    };
+    
+    if (isLoading) {
         return (
             <Layout username={username}>
                 <div className="flex justify-center items-center h-[70vh]">
@@ -79,6 +105,7 @@ const Books: React.FC<{ username: string }> = ({ username }) => {
                 </div>
             </Layout>
         );
+    }
     
     if (error) {
         console.error("Error loading books:", error);
@@ -94,24 +121,6 @@ const Books: React.FC<{ username: string }> = ({ username }) => {
     const books = data?.data || [];
     const totalPages = data?.meta?.totalPages || 1;
     const totalBooks = data?.meta?.total || 0;
-    const hasNext = data?.meta?.hasNext || false;
-    
-    const handlePageChange = (newPage: number) => {
-        setPage(newPage);
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-    };
-
-    const handleSearch = (query: string) => {
-        setSearchQuery(query);
-    };
-
-    const handleSort = (sort: string) => {
-        setSortOption(sort);
-    };
-
-    const handleFilter = (filters: string[]) => {
-        setFilterOptions(filters);
-    };
     
     return (
         <Layout username={username}>
@@ -120,20 +129,20 @@ const Books: React.FC<{ username: string }> = ({ username }) => {
                     <BookSort onSort={handleSort} currentSort={sortOption} />
                     <BookFilter onFilter={handleFilter} currentFilters={filterOptions} />
                 </div>
-                <SearchBar onSearch={handleSearch} defaultValue={searchQuery} />
+                <SearchBar onSearch={handleSearch} value={searchQuery} />
             </div>
 
-            {/* Search Info - separate */}
-            {debouncedSearch && (
+            {/* Search Info */}
+            {searchQuery && (
                 <div className="mb-4 flex items-center gap-2 flex-wrap">
                     <span className="text-gray-300">
                         Found {totalBooks} book{totalBooks !== 1 ? 's' : ''} matching your search
                     </span>
                     
                     <span className="inline-flex items-center gap-2 px-3 py-1 bg-gray-700 rounded-full text-sm">
-                        Search: "{debouncedSearch}"
+                        Search: "{searchQuery}"
                         <button
-                            onClick={() => setSearchQuery("")}
+                            onClick={handleClearSearch}
                             className="text-gray-400 hover:text-white"
                             aria-label="Clear search"
                         >
@@ -143,7 +152,7 @@ const Books: React.FC<{ username: string }> = ({ username }) => {
                 </div>
             )}
 
-            {/* Filter Info - separate */}
+            {/* Filter Info */}
             {filterOptions.length > 0 && (
                 <div className="mb-4 flex items-center gap-2 flex-wrap">
                     <span className="text-gray-300">
@@ -153,7 +162,7 @@ const Books: React.FC<{ username: string }> = ({ username }) => {
                     <span className="inline-flex items-center gap-2 px-3 py-1 bg-gray-700 rounded-full text-sm">
                         Fields: {filterOptions.join(", ")}
                         <button
-                            onClick={() => setFilterOptions([])}
+                            onClick={handleClearFilters}
                             className="text-gray-400 hover:text-white"
                             aria-label="Clear filters"
                         >
@@ -166,8 +175,13 @@ const Books: React.FC<{ username: string }> = ({ username }) => {
             {books.length === 0 ? (
                 <div className="flex flex-col justify-center items-center h-[50vh]">
                     <p className="text-2xl text-gray-400 mb-2">No books found</p>
-                    {debouncedSearch && (
-                        <p className="text-gray-500">Try a different search term</p>
+                    {searchQuery && (
+                        <button 
+                            onClick={handleClearSearch}
+                            className="text-blue-400 hover:underline mt-2"
+                        >
+                            Clear search
+                        </button>
                     )}
                 </div>
             ) : (
@@ -182,7 +196,7 @@ const Books: React.FC<{ username: string }> = ({ username }) => {
                                 cover={book.cover || placeholder}
                             />
                         ))}
-                        {!debouncedSearch && page === totalPages && <AddBookCard />}
+                        {!searchQuery && page === totalPages && <AddBookCard />}
                     </div>
                     
                     <PageControl
