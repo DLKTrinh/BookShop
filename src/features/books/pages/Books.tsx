@@ -52,7 +52,7 @@ const Books: React.FC<{ username: string }> = ({ username }) => {
     const handleSearch = (query: string) => {
         setSearchParams(prev => {
             const params = new URLSearchParams(prev);
-            params.delete('page'); // Reset to page 1
+            params.delete('page');
             if (query.trim()) {
                 params.set('search', query.trim());
             } else {
@@ -61,11 +61,15 @@ const Books: React.FC<{ username: string }> = ({ username }) => {
             return params;
         }, { replace: true });
     };
-    
+
+    const handleClearSearch = () => {
+        handleSearch("");
+    };
+
     const handleSort = (sort: string) => {
         setSearchParams(prev => {
             const params = new URLSearchParams(prev);
-            params.delete('page'); // Reset to page 1
+            params.delete('page');
             const sortId = getIdFromValue(sort);
             if (sortId !== "default") {
                 params.set('sort', sortId);
@@ -79,7 +83,7 @@ const Books: React.FC<{ username: string }> = ({ username }) => {
     const handleFilter = (filters: string[]) => {
         setSearchParams(prev => {
             const params = new URLSearchParams(prev);
-            params.delete('page'); // Reset to page 1
+            params.delete('page');
             if (filters.length > 0) {
                 params.set('fields', filters.join(','));
             } else {
@@ -87,10 +91,6 @@ const Books: React.FC<{ username: string }> = ({ username }) => {
             }
             return params;
         }, { replace: true });
-    };
-    
-    const handleClearSearch = () => {
-        handleSearch("");
     };
     
     const handleClearFilters = () => {

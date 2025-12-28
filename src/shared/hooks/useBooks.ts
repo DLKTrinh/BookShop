@@ -1,5 +1,6 @@
 import { useQuery, keepPreviousData } from "@tanstack/react-query";
 import { getBooks } from "@/api/books.api";
+import { useDebounce } from "./useDebounce";
 
 type UseBooksParams = {
   page: number;
@@ -16,12 +17,14 @@ export function useBooks({
   fields,
   sort,
 }: UseBooksParams) {
+  const debouncedSearch = useDebounce(search?.trim() ?? "", 500);
+
   return useQuery({
     queryKey: [
       "books",
       page,
       limit,
-      search ?? "",
+      debouncedSearch,
       fields?.join(",") ?? "",
       sort ?? "",
     ],
@@ -29,7 +32,7 @@ export function useBooks({
       getBooks({
         page,
         limit,
-        search,
+        search: debouncedSearch || undefined,
         fields,
         sort,
       }),

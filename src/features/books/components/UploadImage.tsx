@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Field, FieldLabel } from "@/shared/components/ui/field";
+import { Field } from "@/shared/components/ui/field";
 
 interface UploadImageProps {
   onImageChange: (file: File | null, preview: string) => void;
@@ -53,7 +53,6 @@ export default function UploadImage({
 
   return (
     <Field>
-      <FieldLabel>Book Cover Image</FieldLabel>
       {!imagePreview ? (
         <div
             onDragOver={handleDragOver}

@@ -1,13 +1,11 @@
-import { useParams, useNavigate } from "react-router-dom";
-import { ArrowLeft } from "lucide-react";
+import { useParams } from "react-router-dom";
 import Layout from "@/shared/components/Layout";
 import BookDetailCard from "../components/BookDetailCard";
 import { useBook } from "../hooks/useBook";
 
 const BookDetail: React.FC<{ username: string }> = ({ username }) => {
   const { id } = useParams<{ id: string }>();
-  const navigate = useNavigate();
-  
+
   const { data: book, isLoading, error } = useBook(id!);
   
   if (isLoading)
@@ -41,16 +39,6 @@ const BookDetail: React.FC<{ username: string }> = ({ username }) => {
   return (
     <Layout username={username}>
       <div className="max-w-6xl mx-auto mt-12">
-        
-        <button
-          onClick={() => navigate(-1)}
-          className="flex items-center gap-2 px-4 py-2 text-gray-300 hover:text-white 
-                     hover:bg-gray-800 rounded-lg transition-all mb-6 group border border-gray-700"
-        >
-          <ArrowLeft className="w-5 h-5 transition-transform group-hover:-translate-x-1" />
-          Back
-        </button>
-
         <BookDetailCard book={book} />
       </div>
     </Layout>

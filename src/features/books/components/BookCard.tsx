@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 interface BookCardProps {
     id: number | string;
@@ -8,9 +8,11 @@ interface BookCardProps {
 }
 
 const BookCard: React.FC<BookCardProps> = ({ id, title, author, cover }) => {
+    const location = useLocation();
     return (
         <Link
-            to={`/books/${id}`}  // Fixed: Changed to= to to={
+            to={`/books/${id}`}
+            state={{ from: location.pathname + location.search }}
             className="block bg-gray-800 rounded-xl overflow-hidden shadow-md hover:shadow-lg transition-transform transform hover:-translate-y-1 border border-gray-700 select-none"
         >
             <div className="relative aspect-[2/3] w-full">

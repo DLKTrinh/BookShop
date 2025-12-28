@@ -3,6 +3,7 @@ import React from "react";
 const Books = React.lazy(() => import("../features/books/pages/Books"));
 const BookDetail = React.lazy(() => import("../features/books/pages/BookDetail"));
 const AddNewBook = React.lazy(() => import("../features/books/pages/AddNewBook"));
+const EditBook = React.lazy(() => import("../features/books/pages/EditBook"));
 
 const username = "Admin"; 
 
@@ -17,6 +18,10 @@ export const routes = [
     },
     {
         path: "/books/new",
-        element: <AddNewBook />,
-},
+        element: <AddNewBook username={username} />,
+    },
+    {
+        path: "/books/:id/edit",
+        element: <EditBook username={username} />,
+    }
 ];
