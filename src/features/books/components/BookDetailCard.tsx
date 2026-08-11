@@ -100,7 +100,7 @@ const BookDetailCard: React.FC<BookDetailCardProps> = ({ book }) => {
               <ul className="space-y-2 text-gray-400">
                 {book.subjects && book.subjects.length > 0 && (
                   <li className="flex items-center">
-                    <Tag className="w-5 h-5 mr-2 text-blue-400" /> Subjects:{" "}
+                    <Tag className="w-5 h-5 mr-2 text-blue-400" /> Genre(s):{" "}
                     <span className="text-gray-200 ml-1">
                       {book.subjects.join(", ")}
                     </span>

@@ -7,6 +7,7 @@ import LoadingBoundary from './shared/components/LoadingBoundary'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { Toaster } from '@/components/ui/sonner'
+import { AuthProvider } from './features/auth/context/AuthContext'
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -23,9 +24,11 @@ ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
     <GlobalErrorBoundary>
       <Suspense fallback={<LoadingBoundary />}>
         <QueryClientProvider client={queryClient}>
+          <AuthProvider>
             <App />
             <ReactQueryDevtools initialIsOpen={false} buttonPosition="top-right"/>
             <Toaster />
+          </AuthProvider>
         </QueryClientProvider>
       </Suspense>
     </GlobalErrorBoundary>

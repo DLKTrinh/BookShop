@@ -5,16 +5,20 @@ interface BookCardProps {
     title: string;
     author: string;
     cover: string;
+    isSelectable?: boolean;
 }
 
-const BookCard: React.FC<BookCardProps> = ({ id, title, author, cover }) => {
+const BookCard: React.FC<BookCardProps> = ({ 
+    id, 
+    title, 
+    author, 
+    cover, 
+    isSelectable = false 
+}) => {
     const location = useLocation();
-    return (
-        <Link
-            to={`/books/${id}`}
-            state={{ from: location.pathname + location.search }}
-            className="block bg-gray-800 rounded-xl overflow-hidden shadow-md hover:shadow-lg transition-transform transform hover:-translate-y-1 border border-gray-700 select-none"
-        >
+
+    const cardContent = (
+        <>
             <div className="relative aspect-[2/3] w-full">
                 <img
                     src={cover}
@@ -30,6 +34,26 @@ const BookCard: React.FC<BookCardProps> = ({ id, title, author, cover }) => {
                 </div>
                 <p className="text-gray-400 text-sm">{author}</p>
             </div>
+        </>
+    );
+
+    // If selectable (delete mode)
+    if (isSelectable) {
+        return (
+            <div className="block bg-gray-800 rounded-xl overflow-hidden shadow-md border border-gray-700 select-none">
+                {cardContent}
+            </div>
+        );
+    }
+
+    // Otherwise
+    return (
+        <Link
+            to={`/books/${id}`}
+            state={{ from: location.pathname + location.search }}
+            className="block bg-gray-800 rounded-xl overflow-hidden shadow-md hover:shadow-lg transition-transform transform hover:-translate-y-1 border border-gray-700 select-none"
+        >
+            {cardContent}
         </Link>
     );
 };

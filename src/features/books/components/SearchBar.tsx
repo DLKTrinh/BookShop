@@ -34,7 +34,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ onSearch, value }) => {
           placeholder="Search books..."
           className="pl-10 pr-10 py-2 bg-gray-800 border border-gray-600 rounded-lg 
                      text-white placeholder-gray-400 focus:outline-none 
-                     focus:border-blue-500 transition-colors w-76"
+                     focus:border-blue-500 transition-colors w-120"
         />
         {localValue && (
           <button

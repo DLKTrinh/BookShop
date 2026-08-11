@@ -47,3 +47,11 @@ export const updateBook = async (id: string, bookData: any) => {
 export const deleteBook = async (id: string) => {
     await api.delete(`/api/books/${id}`);
 };
+
+
+export const deleteManyBooks = async (ids: string[]) => {
+  const { data } = await api.delete("/api/books/many", {
+    data: { ids }
+  });
+  return data;
+};

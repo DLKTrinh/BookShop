@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { addBook, updateBook, deleteBook } from '@/api/books.api';
+import { addBook, updateBook, deleteBook, deleteManyBooks } from '@/api/books.api';
 import { toast } from 'sonner';
 
 export function useAddBook() {
@@ -45,6 +45,21 @@ export function useDeleteBook() {
     },
     onError: (error) => {
       toast.error(error.message || 'Failed to delete book');
+    },
+  });
+}
+
+export function useDeleteManyBooks() {
+  const queryClient = useQueryClient();
+  
+  return useMutation({
+    mutationFn: (ids: string[]) => deleteManyBooks(ids),
+    onSuccess: (data) => {
+      queryClient.invalidateQueries({ queryKey: ['books'] });
+      toast.success(data.message || 'Books deleted successfully');
+    },
+    onError: (error) => {
+      toast.error(error.message || 'Failed to delete books');
     },
   });
 }

@@ -4,17 +4,109 @@ interface GenreSelectorProps {
 }
 
 const genres = [
+  // Fiction
   "Fantasy",
+  "High Fantasy",
+  "Urban Fantasy",
+  "Science Fiction",
   "Sci-Fi",
+  "Dystopian",
+  "Speculative Fiction",
   "Romance",
+  "Contemporary Romance",
+  "Historical Romance",
   "Mystery",
+  "Cozy Mystery",
   "Thriller",
+  "Psychological Thriller",
+  "Crime",
+  "Detective",
+  "Horror",
+  "Gothic Horror",
+  "Paranormal",
+  "Adventure",
+  "Action",
+  "Western",
+
+  // Literature
+  "Literary Fiction",
+  "Classic",
+  "Contemporary Fiction",
+  "Short Stories",
+  "Poetry",
+  "Drama",
+
+  // Non-Fiction
   "Non-Fiction",
   "Biography",
+  "Autobiography",
+  "Memoir",
   "Self-Help",
+  "Personal Development",
+  "Philosophy",
+  "Psychology",
+  "Religion & Spirituality",
   "History",
-  "Horror",
+  "Politics",
+  "Economics",
+  "Sociology",
+  "True Crime",
+
+  // Science & Education
+  "Science",
+  "Technology",
+  "Engineering",
+  "Mathematics",
+  "Computer Science",
+  "Artificial Intelligence",
+  "Data Science",
+  "Education",
+  "Language Learning",
+
+  // Lifestyle & Creative
+  "Art",
+  "Design",
+  "Photography",
+  "Music",
+  "Film",
+  "Cooking",
+  "Food & Drink",
+  "Health",
+  "Fitness",
+  "Travel",
+  "Nature",
+
+  // Business & Work
+  "Business",
+  "Entrepreneurship",
+  "Marketing",
+  "Finance",
+  "Investing",
+  "Management",
+  "Leadership",
+  "Career",
+
+  // Young readers
+  "Children",
+  "Middle Grade",
+  "Young Adult",
+  "Coming of Age",
+
+  // Comics & Media
+  "Comics",
+  "Graphic Novel",
+  "Manga",
+  "Light Novel",
+
+  // Niche
+  "Military",
+  "War",
+  "Sports",
+  "Mythology",
+  "Folklore",
+  "LGBTQ+",
 ];
+
 
 export default function GenreSelector({
   selectedGenres,
