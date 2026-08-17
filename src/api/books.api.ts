@@ -55,3 +55,8 @@ export const deleteManyBooks = async (ids: string[]) => {
   });
   return data;
 };
+
+export const getSubjects =async () : Promise<string[]> => {
+  const { data } = await api.get("/api/books/subjects");
+  return data.subjects;
+}

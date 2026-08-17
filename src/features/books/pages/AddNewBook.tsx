@@ -3,7 +3,7 @@ import Layout from "@/shared/components/Layout";
 import BookForm from "../components/BookForm";
 import { useAddBook } from "../hooks/useBookMutations";
 
-const AddNewBook: React.FC<{ username: string }> = ({ username }) => {
+const AddNewBook: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const addBookMutation = useAddBook();
@@ -21,7 +21,7 @@ const AddNewBook: React.FC<{ username: string }> = ({ username }) => {
   };
 
   return (
-    <Layout username={username}>
+    <Layout>
       <div className="max-w-3xl mx-auto">
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-white mb-2">Add New Book</h1>

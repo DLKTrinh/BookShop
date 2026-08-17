@@ -3,16 +3,17 @@ import { useNavigate } from "react-router-dom";
 import Header from "./Header";
 import Sidebar from "./Sidebar";
 import { useLogout } from "@/features/auth/hooks/useLogin";
+import { useAuth } from "@/features/auth/context/AuthContext";
 
 interface LayoutProps {
     children: React.ReactNode;
-    username: string;
 }
 
-const Layout: React.FC<LayoutProps> = ({ children, username }) => {
+const Layout: React.FC<LayoutProps> = ({ children }) => {
     const [isSidebarOpen, setIsSidebarOpen] = useState(true);
     const navigate = useNavigate();
     const logoutMutation = useLogout();
+    const { user } = useAuth();
 
     useEffect(() => {
         const handleResize = () => {
@@ -40,7 +41,7 @@ const Layout: React.FC<LayoutProps> = ({ children, username }) => {
 
     return (
         <div className="min-h-screen bg-gray-900 text-white">
-            <Header username={username} toggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)} />
+            <Header username={user?.username ?? "User"} toggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)} />
             <div className="flex pt-16">
                 <Sidebar isOpen={isSidebarOpen} onLogout={handleLogout} />
 

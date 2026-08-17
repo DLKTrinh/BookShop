@@ -4,8 +4,8 @@ import {
   FieldGroup,
   FieldLabel,
 } from "@/shared/components/ui/field";
-import GenreSelector from "./GenreSelector";
 import UploadImage from "./UploadImage";
+import SubjectsCombobox from "./SubjectsCombobox";
 
 interface BookFormData {
   title: string;
@@ -36,7 +36,7 @@ export default function BookForm({
 }: BookFormProps) {
   const [title, setTitle] = useState(initialData?.title || "");
   const [author, setAuthor] = useState(initialData?.author || "");
-  const [genres, setGenres] = useState<string[]>(initialData?.subjects || []);
+  const [subjects, setsubjects] = useState<string[]>(initialData?.subjects || []);
   const [year, setYear] = useState<number | null>(initialData?.publication_date ?? null);
   const [coverUrl, setCoverUrl] = useState(initialData?.cover || "");
   const [coverFile, setCoverFile] = useState<File | null>(null);
@@ -58,7 +58,7 @@ export default function BookForm({
 
     if (!title.trim()) newErrors.title = "Title is required";
     if (!author.trim()) newErrors.author = "Author is required";
-    if (genres.length === 0) newErrors.genres = "Select at least one genre";
+    if (subjects.length === 0) newErrors.subjects = "Select at least one subject";
     if (quantity === "" || quantity < 0) newErrors.quantity = "Valid quantity is required";
 
     setErrors(newErrors);
@@ -68,7 +68,7 @@ export default function BookForm({
   const buildFormData = (formState: {
     title: string;
     author: string;
-    genres: string[];
+    subjects: string[];
     year: string;
     publisher: string;
     quantity: number | "";
@@ -77,7 +77,7 @@ export default function BookForm({
     const data: any = {
       title: formState.title,
       author: formState.author,
-      subjects: formState.genres,
+      subjects: formState.subjects,
       quantity: Number(formState.quantity),
     };
 
@@ -105,7 +105,7 @@ export default function BookForm({
     const data = buildFormData({
       title,
       author,
-      genres,
+      subjects,
       year: year !== null ? year.toString() : "",
       publisher,
       quantity,
@@ -160,16 +160,16 @@ export default function BookForm({
         </Field>
 
         <Field>
-          <FieldLabel>Genre(s) *</FieldLabel>
-          <GenreSelector 
-            selectedGenres={genres} 
-            onChange={(newGenres) => {
-              setGenres(newGenres);
-              if (errors.genres) setErrors(prev => ({ ...prev, genres: "" }));
+          <FieldLabel>subject(s) *</FieldLabel>
+          <SubjectsCombobox
+            selectedSubjects={subjects}
+            onChange={(newsubjects) => {
+              setsubjects(newsubjects);
+              if (errors.subjects) setErrors(prev => ({ ...prev, subjects: "" }));
             }}
           />
-          {errors.genres && (
-            <p className="text-red-400 text-sm mt-1">{errors.genres}</p>
+          {errors.subjects && (
+            <p className="text-red-400 text-sm mt-1">{errors.subjects}</p>
           )}
         </Field>
 

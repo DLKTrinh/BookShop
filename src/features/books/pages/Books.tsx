@@ -23,7 +23,7 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 
-const Books: React.FC<{ username: string }> = ({ username }) => {
+const Books: React.FC = () => {
     const navigate = useNavigate();
     const location = useLocation();
     const [searchParams, setSearchParams] = useSearchParams();
@@ -173,7 +173,7 @@ const Books: React.FC<{ username: string }> = ({ username }) => {
     
     if (isLoading) {
         return (
-            <Layout username={username}>
+            <Layout>
                 <div className="flex justify-center items-center h-[70vh]">
                     <p className="text-4xl text-gray-300 animate-pulse">Loading books...</p>
                 </div>
@@ -184,7 +184,7 @@ const Books: React.FC<{ username: string }> = ({ username }) => {
     if (error) {
         console.error("Error loading books:", error);
         return (
-            <Layout username={username}>
+            <Layout>
                 <div className="flex flex-col justify-center items-center h-[70vh] gap-4">
                     <p className="text-4xl text-red-400">Failed to load books.</p>
                     <p className="text-gray-400">There was an error connecting to the server.</p>
@@ -217,7 +217,7 @@ const Books: React.FC<{ username: string }> = ({ username }) => {
     const totalBooks = data?.meta?.total || 0;
     
     return (
-        <Layout username={username}>
+        <Layout>
             {/* Delete Mode Scrim Overlay */}
             {isDeleteMode && (
                 <div 

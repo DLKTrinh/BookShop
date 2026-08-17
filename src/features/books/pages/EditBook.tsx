@@ -4,7 +4,7 @@ import BookForm from "../components/BookForm";
 import { useBook } from "../hooks/useBook";
 import { useUpdateBook } from "../hooks/useBookMutations";
 
-const EditBook: React.FC<{ username: string }> = ({ username }) => {
+const EditBook: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const location = useLocation();
@@ -28,7 +28,7 @@ const EditBook: React.FC<{ username: string }> = ({ username }) => {
 
   if (isLoading) {
     return (
-      <Layout username={username}>
+      <Layout>
         <div className="flex justify-center items-center h-[70vh]">
           <p className="text-2xl text-gray-300 animate-pulse">Loading book...</p>
         </div>
@@ -38,7 +38,7 @@ const EditBook: React.FC<{ username: string }> = ({ username }) => {
 
   if (error || !book) {
     return (
-      <Layout username={username}>
+      <Layout>
         <div className="flex justify-center items-center h-[70vh]">
           <p className="text-2xl text-red-400">Book not found</p>
         </div>
@@ -47,7 +47,7 @@ const EditBook: React.FC<{ username: string }> = ({ username }) => {
   }
 
   return (
-    <Layout username={username}>
+    <Layout>
       <div className="max-w-3xl mx-auto">
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-white mb-2">Edit Book</h1>
