@@ -5,6 +5,7 @@ import { Button } from "@/shared/components/ui/button";
 import { BookOpen, Calendar, User, Tag, Factory, Layers } from "lucide-react";
 import placeholder from "@/assets/placeholder.png";
 import { useDeleteBook } from "../hooks/useBookMutations";
+import { useAuth } from "@/features/auth/context/AuthContext";
 import { ArrowLeft } from "lucide-react";
 import {
   AlertDialog,
@@ -36,6 +37,8 @@ const BookDetailCard: React.FC<BookDetailCardProps> = ({ book }) => {
   const location = useLocation();
   const deleteBookMutation = useDeleteBook();
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
+  const { user } = useAuth();
+  const isAdmin = user?.role === "admin";
 
   const isAvailable = (book.quantity ?? 0) > 0;
   const statusText = isAvailable ? "Available" : "Unavailable";
@@ -92,15 +95,15 @@ const BookDetailCard: React.FC<BookDetailCardProps> = ({ book }) => {
                 {book.title || "Untitled Book"}
               </h1>
 
-              <p className="text-lg text-gray-300 mb-6 flex items-center">
-                <User className="w-5 h-5 mr-2 text-blue-400" />{" "}
+              <p className="text-xl text-gray-300 mb-6 flex items-center">
+                <User className="w-6 h-6 mr-2 text-blue-400" />{" "}
                 {book.author || "Unknown Author"}
               </p>
 
               <ul className="space-y-2 text-gray-400">
                 {book.subjects && book.subjects.length > 0 && (
-                  <li className="flex items-center">
-                    <Tag className="w-5 h-5 mr-2 text-blue-400" /> Genre(s):{" "}
+                  <li className="flex items-start">
+                    <Tag className="w-5 h-5 mr-2 text-blue-400" /> Subject(s):{" "}
                     <span className="text-gray-200 ml-1">
                       {book.subjects.join(", ")}
                     </span>
@@ -149,19 +152,23 @@ const BookDetailCard: React.FC<BookDetailCardProps> = ({ book }) => {
 
             {/* Action Buttons */}
             <div className="mt-8 flex gap-4 flex-wrap">
-              <Button 
-                className="bg-blue-600 hover:bg-blue-700"
-                onClick={handleEdit}
-              >
-                Edit
-              </Button>
-              <Button 
-                variant="destructive"
-                onClick={handleDeleteClick}
-                disabled={deleteBookMutation.isPending}
-              >
-                {deleteBookMutation.isPending ? "Deleting..." : "Delete"}
-              </Button>
+              {isAdmin && (
+                <>
+                  <Button 
+                    className="bg-blue-600 hover:bg-blue-700"
+                    onClick={handleEdit}
+                  >
+                    Edit
+                  </Button>
+                  <Button 
+                    variant="destructive"
+                    onClick={handleDeleteClick}
+                    disabled={deleteBookMutation.isPending}
+                  >
+                    {deleteBookMutation.isPending ? "Deleting..." : "Delete"}
+                  </Button>
+                </>
+              )}
               <Button
                 className={`${
                   isAvailable

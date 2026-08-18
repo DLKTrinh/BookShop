@@ -43,7 +43,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
         <div className="min-h-screen bg-gray-900 text-white">
             <Header username={user?.username ?? "User"} toggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)} />
             <div className="flex pt-16">
-                <Sidebar isOpen={isSidebarOpen} onLogout={handleLogout} />
+                <Sidebar isOpen={isSidebarOpen} onLogout={handleLogout} isAdmin={user?.role === "admin"} />
 
                 <main
                 className={`flex-1 p-6 bg-gray-900 overflow-y-auto transition-all duration-300 ${

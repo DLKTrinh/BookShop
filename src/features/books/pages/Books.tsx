@@ -12,6 +12,7 @@ import { useBooks } from "@/shared/hooks/useBooks";
 import { getIdFromValue, getValueFromId } from "../utils/sortOptions";
 import { useDeleteManyBooks } from "../hooks/useBookMutations";
 import { Plus, Trash2, X } from "lucide-react";
+import { useAuth } from "@/features/auth/context/AuthContext";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -28,6 +29,8 @@ const Books: React.FC = () => {
     const location = useLocation();
     const [searchParams, setSearchParams] = useSearchParams();
     const deleteManyBooksMutation = useDeleteManyBooks();
+    const { user } = useAuth();
+    const isAdmin = user?.role === "admin";
 
     const [isDeleteMode, setIsDeleteMode] = useState(false);
     const [selectedBooks, setSelectedBooks] = useState<Set<string>>(new Set());
@@ -239,7 +242,8 @@ const Books: React.FC = () => {
                         <SearchBar onSearch={handleSearch} value={searchQuery} />
                     </div>
 
-                    {/* Action Buttons */}
+                {/* Action Buttons admin only */}
+                {isAdmin && (
                     <div className="flex gap-2 ml-4">
                         <button
                             onClick={handleAddBook}
@@ -276,6 +280,7 @@ const Books: React.FC = () => {
                             )}
                         </button>
                     </div>
+                )}
                 </div>
 
                 {/* Delete Mode Controls */}
@@ -388,7 +393,7 @@ const Books: React.FC = () => {
                                     </div>
                                 );
                             })}
-                            {!searchQuery && !isDeleteMode && page === totalPages && <AddBookCard />}
+                            {!searchQuery && !isDeleteMode && page === totalPages && isAdmin && <AddBookCard />}
                         </div>
                         
                         <PageControl

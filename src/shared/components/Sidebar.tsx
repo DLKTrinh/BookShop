@@ -1,5 +1,5 @@
 import { NavLink } from "react-router-dom";
-import { Home, BookOpen, Users, Settings, LogOut } from "lucide-react";
+import { Home, BookOpen, Users, Settings, LogOut, ShieldCheck } from "lucide-react";
 
 interface NavItemProps {
     to: string;
@@ -11,6 +11,7 @@ interface NavItemProps {
 interface SidebarProps {
     isOpen: boolean;
     onLogout?: () => void;
+    isAdmin?: boolean;
 }
 
 
@@ -38,7 +39,7 @@ const NavItem: React.FC<NavItemProps> = ({ to, icon, label, isOpen }) => (
 );
 
 
-const Sidebar: React.FC<SidebarProps> = ({ isOpen, onLogout }) => {
+const Sidebar: React.FC<SidebarProps> = ({ isOpen, onLogout, isAdmin }) => {
     return (
         <aside
         className={`fixed left-0 h-[calc(100vh-4rem)] bg-gray-800 border-r border-gray-700 flex flex-col justify-between transition-all duration-300 ${
@@ -48,8 +49,11 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onLogout }) => {
             <nav className="flex flex-col py-4">
                 <NavItem to="/dashboard" icon={<Home size={20} />} label="Dashboard" isOpen={isOpen} />
                 <NavItem to="/books" icon={<BookOpen size={20} />} label="Books" isOpen={isOpen} />
-                <NavItem to="/users" icon={<Users size={20} />} label="Users" isOpen={isOpen} />
+                <NavItem to="/profile" icon={<Users size={20} />} label="Profile" isOpen={isOpen} />
                 <NavItem to="/settings" icon={<Settings size={20} />} label="Settings" isOpen={isOpen} />
+                {isAdmin && (
+                    <NavItem to="/admin" icon={<ShieldCheck size={20} />} label="Admin" isOpen={isOpen} />
+                )}
             </nav>
 
             <div className="px-2 pb-4">
