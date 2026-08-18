@@ -1,14 +1,17 @@
-import { Link } from "react-router-dom";
-import { BookOpen } from "lucide-react";
+import { BookOpen, User, Settings as SettingsIcon, ShieldCheck } from "lucide-react";
 import Layout from "@/shared/components/Layout";
+import NavCard from "../components/NavCard";
 import { useAuth } from "@/features/auth/context/AuthContext";
 
 const Dashboard: React.FC = () => {
   const { user } = useAuth();
+  const isAdmin = user?.role === "admin";
+
+  const gridCols = isAdmin ? "lg:grid-cols-4" : "lg:grid-cols-3";
 
   return (
     <Layout>
-      <div className="max-w-5xl mx-auto">
+      <div className="max-w-6xl mx-auto">
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-white mb-2">
             Welcome back{user?.username ? `, ${user.username}` : ""}
@@ -16,21 +19,37 @@ const Dashboard: React.FC = () => {
           <p className="text-gray-400">Here's where you can get to from here.</p>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          <Link
+        <div className={`grid grid-cols-1 sm:grid-cols-2 ${gridCols} gap-6`}>
+          <NavCard
             to="/books"
-            className="group bg-gray-800 border border-gray-700 rounded-lg p-6 hover:border-blue-500 transition-colors"
-          >
-            <div className="flex items-center justify-center w-10 h-10 rounded-lg bg-blue-600/20 text-blue-400 mb-4">
-              <BookOpen className="w-5 h-5" />
-            </div>
-            <h2 className="text-lg font-semibold text-white mb-1 group-hover:text-blue-400 transition-colors">
-              Books
-            </h2>
-            <p className="text-sm text-gray-400">
-              Browse the catalog, add new titles, and manage your inventory.
-            </p>
-          </Link>
+            icon={BookOpen}
+            title="Books"
+            description="Browse the catalog, add new titles, and manage your inventory."
+            accent="blue"
+          />
+          <NavCard
+            to="/profile"
+            icon={User}
+            title="My Profile"
+            description="View your account details and role."
+            accent="violet"
+          />
+          <NavCard
+            to="/settings"
+            icon={SettingsIcon}
+            title="Settings"
+            description="Configure preferences and app-wide options."
+            accent="teal"
+          />
+          {isAdmin && (
+            <NavCard
+              to="/admin"
+              icon={ShieldCheck}
+              title="Admin"
+              description="Manage users and books. Admins only."
+              accent="amber"
+            />
+          )}
         </div>
       </div>
     </Layout>

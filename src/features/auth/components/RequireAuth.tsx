@@ -1,8 +1,13 @@
 import { Navigate, useLocation } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 
-const RequireAuth: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const { isAuthenticated, isInitializing } = useAuth();
+interface RequireAuthProps {
+  children: React.ReactNode;
+  role?: "admin";
+}
+
+const RequireAuth: React.FC<RequireAuthProps> = ({ children, role }) => {
+  const { isAuthenticated, isInitializing, user } = useAuth();
   const location = useLocation();
 
   if (isInitializing) {
@@ -15,6 +20,10 @@ const RequireAuth: React.FC<{ children: React.ReactNode }> = ({ children }) => {
 
   if (!isAuthenticated) {
     return <Navigate to="/login" state={{ from: location.pathname + location.search }} replace />;
+  }
+
+  if (role && user?.role !== role) {
+    return <Navigate to="/unauthorized" replace />;
   }
 
   return <>{children}</>;
