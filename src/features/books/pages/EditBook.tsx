@@ -11,15 +11,9 @@ const EditBook: React.FC = () => {
   const { data: book, isLoading, error } = useBook(id!);
   const updateBookMutation = useUpdateBook();
 
-  const handleSubmit = (data: any) => {
-    updateBookMutation.mutate(
-      { id: id!, data },
-      {
-        onSuccess: () => {
-          navigate(location.state?.from ?? `/books/${id}`);
-        },
-      }
-    );
+  const handleSubmit = async (data: any) => {
+    await updateBookMutation.mutateAsync({ id: id!, data })
+    navigate(location.state?.from ?? `/books/${id}`);
   };
 
   const handleCancel = () => {

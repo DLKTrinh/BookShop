@@ -6,6 +6,7 @@ import {
 } from "@/shared/components/ui/field";
 import UploadImage from "./UploadImage";
 import SubjectsCombobox from "./SubjectsCombobox";
+import { useQueryClient } from "@tanstack/react-query";
 
 interface BookFormData {
   title: string;
@@ -19,7 +20,7 @@ interface BookFormData {
 
 interface BookFormProps {
   initialData?: Partial<BookFormData>;
-  onSubmit: (data: BookFormData) => void;
+  onSubmit: (data: BookFormData) => Promise<void>;
   onCancel?: () => void;
   isSubmitting?: boolean;
   submitButtonText?: string;
@@ -44,6 +45,8 @@ export default function BookForm({
   const [quantity, setQuantity] = useState<number | "">(initialData?.quantity ?? "");
   const [publisher, setPublisher] = useState(initialData?.publisher || "");
   const [errors, setErrors] = useState<Record<string, string>>({});
+
+  const queryClient = useQueryClient();
 
   const handleImageChange = (file: File | null, preview: string) => {
     setCoverFile(file);
@@ -97,7 +100,7 @@ export default function BookForm({
     return data;
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
     if (!validateForm()) return;
@@ -112,7 +115,11 @@ export default function BookForm({
       coverUrl,
     });
 
-    onSubmit(data);
+    await onSubmit(data);
+
+    await queryClient.invalidateQueries({ 
+      queryKey: ['subjects'] 
+    });
   };
 
   const buttonText = submitButtonText || (mode === 'add' ? 'Add Book' : 'Update Book');
@@ -160,7 +167,7 @@ export default function BookForm({
         </Field>
 
         <Field>
-          <FieldLabel>subject(s) *</FieldLabel>
+          <FieldLabel>Subject(s) *</FieldLabel>
           <SubjectsCombobox
             selectedSubjects={subjects}
             onChange={(newsubjects) => {

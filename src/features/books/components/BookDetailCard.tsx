@@ -6,7 +6,7 @@ import { BookOpen, Calendar, User, Tag, Factory, Layers } from "lucide-react";
 import placeholder from "@/assets/placeholder.png";
 import { useDeleteBook } from "../hooks/useBookMutations";
 import { useAuth } from "@/features/auth/context/AuthContext";
-import { ArrowLeft } from "lucide-react";
+import BackButton from "@/shared/components/BackButton";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -68,15 +68,7 @@ const BookDetailCard: React.FC<BookDetailCardProps> = ({ book }) => {
 
   return (
     <>
-      <button
-        onClick={handleBack}
-        className="flex items-center gap-2 px-4 py-2 text-gray-300 hover:text-white 
-                  hover:bg-gray-800 rounded-lg transition-all mb-6 group 
-                  border border-gray-700"
-      >
-        <ArrowLeft className="w-5 h-5 transition-transform group-hover:-translate-x-1" />
-        Back
-      </button>
+      <BackButton fallbackTo="/books" className="mb-6" />
       <Card className="bg-gray-800 border border-gray-700 rounded-2xl shadow-xl text-gray-100">
         <CardContent className="flex flex-col md:flex-row gap-10 p-8">
           {/* Left: Book Cover */}
@@ -95,15 +87,15 @@ const BookDetailCard: React.FC<BookDetailCardProps> = ({ book }) => {
                 {book.title || "Untitled Book"}
               </h1>
 
-              <p className="text-xl text-gray-300 mb-6 flex items-center">
-                <User className="w-6 h-6 mr-2 text-blue-400" />{" "}
+              <p className="text-lg text-gray-300 mb-6 flex items-center">
+                <User className="w-5 h-5 mr-2 text-blue-400" />{" "}
                 {book.author || "Unknown Author"}
               </p>
 
               <ul className="space-y-2 text-gray-400">
                 {book.subjects && book.subjects.length > 0 && (
                   <li className="flex items-start">
-                    <Tag className="w-5 h-5 mr-2 text-blue-400" /> Subject(s):{" "}
+                    <Tag className="w-5 h-5 mr-2 mt-0.5 text-blue-400 shrink-0" /> Subject(s):{" "}
                     <span className="text-gray-200 ml-1">
                       {book.subjects.join(", ")}
                     </span>

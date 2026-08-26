@@ -17,6 +17,7 @@ export default function SubjectsCombobox({ selectedSubjects, onChange }: Subject
 
   const containerRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+  const optionRefs = useRef<(HTMLButtonElement | null)[]>([]);
 
   // Close the dropdown on outside click
   useEffect(() => {
@@ -44,8 +45,9 @@ export default function SubjectsCombobox({ selectedSubjects, onChange }: Subject
   const optionCount = filteredSubjects.length + (canAddNew ? 1 : 0);
 
   useEffect(() => {
+    optionRefs.current = [];
     setHighlightedIndex(0);
-  }, [inputValue, isOpen]);
+  }, [inputValue, isOpen, canAddNew]);
 
   const selectSubject = (subject: string) => {
     onChange([...selectedSubjects, subject]);
@@ -53,6 +55,14 @@ export default function SubjectsCombobox({ selectedSubjects, onChange }: Subject
     setHighlightedIndex(0);
     inputRef.current?.focus();
   };
+
+  useEffect(() => {
+    if (!isOpen) return;
+
+    optionRefs.current[highlightedIndex]?.scrollIntoView({
+      block: "nearest",
+    });
+  }, [highlightedIndex, isOpen]);
 
   const removeSubject = (subject: string) => {
     onChange(selectedSubjects.filter((s) => s !== subject));
@@ -68,11 +78,11 @@ export default function SubjectsCombobox({ selectedSubjects, onChange }: Subject
       setHighlightedIndex((i) => Math.max(i - 1, 0));
     } else if (e.key === "Enter") {
       e.preventDefault();
-      if (highlightedIndex < filteredSubjects.length) {
+      if (canAddNew && highlightedIndex === filteredSubjects.length) {
+        selectSubject(inputValue.trim());
+      } else {
         const match = filteredSubjects[highlightedIndex];
         if (match) selectSubject(match);
-      } else if (canAddNew) {
-        selectSubject(inputValue.trim());
       }
     } else if (e.key === "Escape") {
       setIsOpen(false);
@@ -86,30 +96,40 @@ export default function SubjectsCombobox({ selectedSubjects, onChange }: Subject
         ref={inputRef}
         type="text"
         value={inputValue}
-        onChange={(e) => setInputValue(e.target.value)}
+        onChange={(e) => {
+          const value = e.target.value;
+          const titleCased = value
+            .split(" ")
+            .map((word) => (word.length > 0 ? word.charAt(0).toUpperCase() + word.slice(1) : word))
+            .join(" ");
+          setInputValue(titleCased);
+        }}
         onFocus={() => setIsOpen(true)}
         onKeyDown={handleKeyDown}
         placeholder="Search or add a subject..."
         className="w-full bg-gray-900 border border-gray-600 rounded-lg px-4 py-2.5 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
       />
- 
+
       {isOpen && (
         <div className="absolute z-10 mt-1 w-full bg-gray-800 border border-gray-700 rounded-lg shadow-lg max-h-60 overflow-y-auto">
           {isLoading && (
             <div className="px-4 py-2.5 text-sm text-gray-400">Loading subjects...</div>
           )}
- 
+
           {!isLoading && filteredSubjects.length === 0 && !canAddNew && (
             <div className="px-4 py-2.5 text-sm text-gray-500">
               {query ? "No matching subjects" : "No subjects available yet"}
             </div>
           )}
- 
+
           {filteredSubjects.map((subject, index) => (
             <button
               key={subject}
               type="button"
               onClick={() => selectSubject(subject)}
+              ref={(el) => {
+                optionRefs.current[index] = el
+              }}
               onMouseEnter={() => setHighlightedIndex(index)}
               className={`w-full text-left px-4 py-2.5 text-sm transition-colors ${
                 index === highlightedIndex
@@ -120,11 +140,14 @@ export default function SubjectsCombobox({ selectedSubjects, onChange }: Subject
               {subject}
             </button>
           ))}
- 
+
           {canAddNew && (
             <button
               type="button"
               onClick={() => selectSubject(inputValue.trim())}
+              ref={(el) => {
+                optionRefs.current[filteredSubjects.length] = el
+              }}
               onMouseEnter={() => setHighlightedIndex(filteredSubjects.length)}
               className={`w-full flex items-center gap-2 text-left px-4 py-2.5 text-sm border-t border-gray-700 transition-colors ${
                 highlightedIndex === filteredSubjects.length
@@ -138,7 +161,7 @@ export default function SubjectsCombobox({ selectedSubjects, onChange }: Subject
           )}
         </div>
       )}
- 
+
       {selectedSubjects.length > 0 && (
         <div className="mt-2.5 flex flex-wrap gap-2">
           {selectedSubjects.map((subject) => (

@@ -9,22 +9,41 @@ interface LayoutProps {
     children: React.ReactNode;
 }
 
+const SIDEBAR_STORAGE_KEY = "sidebarOpen";
+
+// Reads any previously saved preference; only falls back to a width-based
+// guess (open on desktop, closed on narrow screens) the very first time,
+// before the user has ever toggled it themselves.
+const getInitialSidebarState = (): boolean => {
+    if (typeof window === "undefined") return true;
+    const stored = localStorage.getItem(SIDEBAR_STORAGE_KEY);
+    if (stored !== null) return stored === "true";
+    return window.innerWidth >= 1024;
+};
+
 const Layout: React.FC<LayoutProps> = ({ children }) => {
-    const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+    const [isSidebarOpen, setIsSidebarOpen] = useState(getInitialSidebarState);
     const navigate = useNavigate();
     const logoutMutation = useLogout();
     const { user } = useAuth();
 
+    // Persist every change — both manual toggles (via Header's button) and
+    // the auto-collapse below — so a fresh Layout instance on the next page
+    // (Layout remounts on every route change) starts from this value instead
+    // of always defaulting back open.
+    useEffect(() => {
+        localStorage.setItem(SIDEBAR_STORAGE_KEY, String(isSidebarOpen));
+    }, [isSidebarOpen]);
+
     useEffect(() => {
         const handleResize = () => {
+            // Only auto-*close* for genuinely narrow screens — deliberately
+            // does NOT force it back open on wide screens, since that was
+            // exactly what overrode a manually-closed sidebar before.
             if (window.innerWidth < 1024) {
                 setIsSidebarOpen(false);
-            } else {
-                setIsSidebarOpen(true);
             }
         };
-
-        handleResize();
 
         window.addEventListener("resize", handleResize);
 
@@ -46,7 +65,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
                 <Sidebar isOpen={isSidebarOpen} onLogout={handleLogout} isAdmin={user?.role === "admin"} />
 
                 <main
-                className={`flex-1 p-6 bg-gray-900 overflow-y-auto transition-all duration-300 ${
+                className={`flex-1 p-6 bg-gray-900 transition-all duration-300 ${
                     isSidebarOpen ? "ml-60" : "ml-15"
                 }`}
                 >

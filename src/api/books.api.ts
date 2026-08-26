@@ -6,6 +6,7 @@ type GetBooksParams = {
     search?: string;
     fields?: string[];
     sort?: string;
+    subjects?: string[];
 };
 
 export const getBooks = async ({
@@ -14,6 +15,7 @@ export const getBooks = async ({
     search,
     fields,
     sort,
+    subjects,
 }: GetBooksParams) => {
     const params = new URLSearchParams();
 
@@ -23,6 +25,7 @@ export const getBooks = async ({
     if (search) params.set("search", search);
     if (fields?.length) params.set("fields", fields.join(","));
     if (sort) params.set("sort", sort);
+    if (subjects?.length) params.set("subjects", subjects.join(","));
 
     const { data } = await api.get(`/api/books?${params.toString()}`);
     return data;
@@ -56,7 +59,7 @@ export const deleteManyBooks = async (ids: string[]) => {
   return data;
 };
 
-export const getSubjects =async () : Promise<string[]> => {
+export const getSubjects = async (): Promise<string[]> => {
   const { data } = await api.get("/api/books/subjects");
   return data.subjects;
-}
+};

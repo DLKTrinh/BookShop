@@ -8,12 +8,9 @@ const AddNewBook: React.FC = () => {
   const location = useLocation();
   const addBookMutation = useAddBook();
 
-  const handleSubmit = (data: any) => {
-    addBookMutation.mutate(data, {
-      onSuccess: () => {
-        navigate(location.state?.from ?? "/books");
-      },
-    });
+  const handleSubmit = async (data: any) => {
+    await addBookMutation.mutateAsync(data);
+    navigate(location.state?.from ?? "/books");
   };
 
   const handleCancel = () => {

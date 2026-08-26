@@ -1,28 +1,68 @@
-import React, { useState } from "react";
+import { useState, useEffect } from "react";
+import { Search } from "lucide-react";
+import { useSubjects } from "../hooks/useSubjects";
+
+// Extensible on purpose: each future filter (year range, publisher, etc.)
+// becomes one more optional field here, not a redesign of this shape.
+export interface BookFilters {
+  subjects?: string[];
+  // yearRange?: { min?: number; max?: number };  // planned
+  // publishers?: string[];                        // planned
+}
 
 interface BookFilterProps {
-  onFilter: (filters: string[]) => void;
-  currentFilters: string[];
+  onFilter: (filters: BookFilters) => void;
+  currentFilters: BookFilters;
 }
+
+// Counts every active (applied) filter across every category — as more
+// categories are added above, add their contribution here too.
+const countActiveFilters = (filters: BookFilters): number => {
+  return (filters.subjects?.length ?? 0);
+};
 
 const BookFilter: React.FC<BookFilterProps> = ({ onFilter, currentFilters }) => {
   const [isOpen, setIsOpen] = useState(false);
+  const { data: allSubjects = [], isLoading } = useSubjects();
 
-  // Customize these filter options based on your needs
-  const filterOptions = [
-    { value: "title", label: "Title" },
-    { value: "author", label: "Author" },
-    { value: "genre", label: "Genre" },
-    { value: "publisher", label: "Publisher" },
-    { value: "year", label: "Year" },
-    { value: "isbn", label: "ISBN" },
-  ];
+  // Draft state — nothing here touches onFilter (and therefore the book
+  // list/URL/network request) until "Apply" is clicked. No debounce needed:
+  // this only filters an already-fetched local array, not a network call.
+  const [pendingSubjects, setPendingSubjects] = useState<string[]>(currentFilters.subjects ?? []);
+  const [searchQuery, setSearchQuery] = useState("");
 
-  const handleToggle = (value: string) => {
-    const newFilters = currentFilters.includes(value)
-      ? currentFilters.filter(f => f !== value)
-      : [...currentFilters, value];
-    onFilter(newFilters);
+  // Reset the draft to match the currently-applied filters every time the
+  // panel opens, so a previous unsaved edit doesn't linger silently.
+  useEffect(() => {
+    if (isOpen) {
+      setPendingSubjects(currentFilters.subjects ?? []);
+      setSearchQuery("");
+    }
+  }, [isOpen]);
+
+  const activeCount = countActiveFilters(currentFilters);
+
+  const query = searchQuery.trim().toLowerCase();
+  const visibleSubjects = query
+    ? allSubjects.filter((s) => s.toLowerCase().includes(query))
+    : allSubjects;
+
+  const handleToggleSubject = (subject: string) => {
+    setPendingSubjects((prev) =>
+      prev.includes(subject) ? prev.filter((s) => s !== subject) : [...prev, subject]
+    );
+  };
+
+  const handleApply = () => {
+    onFilter({
+      ...currentFilters,
+      subjects: pendingSubjects.length > 0 ? pendingSubjects : undefined,
+    });
+    setIsOpen(false);
+  };
+
+  const handleClearAll = () => {
+    setPendingSubjects([]);
   };
 
   return (
@@ -30,13 +70,14 @@ const BookFilter: React.FC<BookFilterProps> = ({ onFilter, currentFilters }) => 
       <button
         onClick={() => setIsOpen(!isOpen)}
         className="px-4 py-2 bg-gray-800 border border-gray-600 rounded-lg 
-                   text-white hover:bg-gray-700 transition-colors flex items-center gap-2 select-none"
+                   text-white hover:bg-gray-700 transition-colors flex items-center gap-2 select-none
+                   outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 focus-visible:ring-offset-gray-900"
       >
         Filter
-        {currentFilters.length > 0 && (
+        {activeCount > 0 && (
           <span className="bg-blue-600 text-white text-xs rounded-full w-5 h-5 
                          flex items-center justify-center">
-            {currentFilters.length}
+            {activeCount}
           </span>
         )}
         <svg 
@@ -56,39 +97,77 @@ const BookFilter: React.FC<BookFilterProps> = ({ onFilter, currentFilters }) => 
             onClick={() => setIsOpen(false)}
           />
           <div className="absolute top-full mt-2 left-0 bg-gray-800 border border-gray-600 
-                         rounded-lg shadow-lg z-20 min-w-[200px] p-2">
-            <div className="text-xs text-gray-400 px-2 py-1 mb-1">
-              Select fields to display
-            </div>
-            {filterOptions.map((option) => (
-              <label
-                key={option.value}
-                className="flex items-center gap-2 px-2 py-2 hover:bg-gray-700 
-                         rounded cursor-pointer transition-colors"
-              >
+                         rounded-lg shadow-lg z-20 w-72 flex flex-col">
+            <div className="p-3 border-b border-gray-700">
+              <div className="flex items-center justify-between mb-2">
+                <span className="text-xs text-gray-400">Subjects</span>
+                {pendingSubjects.length > 0 && (
+                  <span className="text-xs text-blue-400">{pendingSubjects.length} selected</span>
+                )}
+              </div>
+              <div className="relative">
+                <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-gray-500" />
                 <input
-                  type="checkbox"
-                  checked={currentFilters.includes(option.value)}
-                  onChange={() => handleToggle(option.value)}
-                  className="w-4 h-4 rounded border-gray-600 bg-gray-700 
-                           text-blue-600 focus:ring-blue-500 focus:ring-offset-0"
+                  type="text"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  placeholder="Search subjects..."
+                  className="w-full bg-gray-900 border border-gray-600 rounded-md pl-8 pr-2 py-1.5 text-sm text-white
+                             placeholder-gray-500 outline-none focus:ring-2 focus:ring-blue-500"
                 />
-                <span className="text-white">{option.label}</span>
-              </label>
-            ))}
-            
-            {currentFilters.length > 0 && (
+              </div>
+            </div>
+
+            <div className="max-h-64 overflow-y-auto p-2">
+              {isLoading && (
+                <div className="px-2 py-2 text-sm text-gray-500">Loading subjects...</div>
+              )}
+
+              {!isLoading && visibleSubjects.length === 0 && (
+                <div className="px-2 py-2 text-sm text-gray-500">
+                  {query ? "No matching subjects" : "No subjects yet"}
+                </div>
+              )}
+
+              {visibleSubjects.map((subject) => (
+                <label
+                  key={subject}
+                  className="flex items-center gap-2 px-2 py-2 hover:bg-gray-700 
+                           rounded cursor-pointer transition-colors"
+                >
+                  <input
+                    type="checkbox"
+                    checked={pendingSubjects.includes(subject)}
+                    onChange={() => handleToggleSubject(subject)}
+                    className="w-4 h-4 rounded border-gray-600 bg-gray-700 
+                             text-blue-600 focus:ring-blue-500 focus:ring-offset-0"
+                  />
+                  <span className="text-white">{subject}</span>
+                </label>
+              ))}
+            </div>
+
+            {/* Future filter sections (year range, publisher) go here as
+                additional labeled blocks between the list above and the
+                footer below. */}
+
+            <div className="flex items-center justify-between gap-2 p-3 border-t border-gray-700">
               <button
-                onClick={() => {
-                  onFilter([]);
-                  setIsOpen(false);
-                }}
-                className="w-full mt-2 px-2 py-1 text-sm text-blue-400 
-                         hover:text-blue-300 border-t border-gray-700 pt-2"
+                onClick={handleClearAll}
+                disabled={pendingSubjects.length === 0}
+                className="text-sm text-gray-400 hover:text-white disabled:opacity-40 disabled:cursor-not-allowed
+                           outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 focus-visible:ring-offset-gray-800 rounded"
               >
-                Clear all
+                Clear
               </button>
-            )}
+              <button
+                onClick={handleApply}
+                className="px-4 py-1.5 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-lg transition-colors
+                           outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 focus-visible:ring-offset-gray-800"
+              >
+                Apply
+              </button>
+            </div>
           </div>
         </>
       )}
