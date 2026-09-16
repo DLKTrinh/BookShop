@@ -42,3 +42,13 @@ export const getProfile = async (): Promise<AuthUser> => {
   const { data } = await api.get("/api/auth/profile");
   return data;
 };
+
+export const changePassword = async (currentPassword: string, newPassword: string): Promise<{ message: string }> => {
+  const { data } = await api.post('/api/auth/change-password', { currentPassword, newPassword });
+  return data;
+};
+
+export const deleteAccount = async (password: string): Promise<{ message: string }> => {
+  const { data } = await api.delete('/api/auth/me', { data: { password } });
+  return data;
+};
