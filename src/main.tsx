@@ -8,6 +8,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { Toaster } from '@/components/ui/sonner'
 import { AuthProvider } from './features/auth/context/AuthContext'
+import { ThemeProvider } from './shared/context/ThemeContext'
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -23,13 +24,15 @@ ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <React.StrictMode>
     <GlobalErrorBoundary>
       <Suspense fallback={<LoadingBoundary />}>
-        <QueryClientProvider client={queryClient}>
-          <AuthProvider>
-            <App />
-            <ReactQueryDevtools initialIsOpen={false} buttonPosition="top-right"/>
-            <Toaster />
-          </AuthProvider>
-        </QueryClientProvider>
+        <ThemeProvider>
+          <QueryClientProvider client={queryClient}>
+            <AuthProvider>
+              <App />
+              <ReactQueryDevtools initialIsOpen={false} buttonPosition="top-right"/>
+              <Toaster />
+            </AuthProvider>
+          </QueryClientProvider>
+        </ThemeProvider>
       </Suspense>
     </GlobalErrorBoundary>
   </React.StrictMode>
