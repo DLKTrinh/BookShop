@@ -4,9 +4,8 @@ import {
   FieldGroup,
   FieldLabel,
 } from "@/shared/components/ui/field";
-import UploadImage from "./UploadImage";
 import SubjectsCombobox from "./SubjectsCombobox";
-import { useQueryClient } from "@tanstack/react-query";
+import UploadImage from "./UploadImage";
 
 interface BookFormData {
   title: string;
@@ -20,7 +19,7 @@ interface BookFormData {
 
 interface BookFormProps {
   initialData?: Partial<BookFormData>;
-  onSubmit: (data: BookFormData) => Promise<void>;
+  onSubmit: (data: BookFormData) => void;
   onCancel?: () => void;
   isSubmitting?: boolean;
   submitButtonText?: string;
@@ -37,7 +36,7 @@ export default function BookForm({
 }: BookFormProps) {
   const [title, setTitle] = useState(initialData?.title || "");
   const [author, setAuthor] = useState(initialData?.author || "");
-  const [subjects, setsubjects] = useState<string[]>(initialData?.subjects || []);
+  const [subjects, setSubjects] = useState<string[]>(initialData?.subjects || []);
   const [year, setYear] = useState<number | null>(initialData?.publication_date ?? null);
   const [coverUrl, setCoverUrl] = useState(initialData?.cover || "");
   const [coverFile, setCoverFile] = useState<File | null>(null);
@@ -45,8 +44,6 @@ export default function BookForm({
   const [quantity, setQuantity] = useState<number | "">(initialData?.quantity ?? "");
   const [publisher, setPublisher] = useState(initialData?.publisher || "");
   const [errors, setErrors] = useState<Record<string, string>>({});
-
-  const queryClient = useQueryClient();
 
   const handleImageChange = (file: File | null, preview: string) => {
     setCoverFile(file);
@@ -100,7 +97,7 @@ export default function BookForm({
     return data;
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     
     if (!validateForm()) return;
@@ -115,11 +112,7 @@ export default function BookForm({
       coverUrl,
     });
 
-    await onSubmit(data);
-
-    await queryClient.invalidateQueries({ 
-      queryKey: ['subjects'] 
-    });
+    onSubmit(data);
   };
 
   const buttonText = submitButtonText || (mode === 'add' ? 'Add Book' : 'Update Book');
@@ -138,12 +131,12 @@ export default function BookForm({
               if (errors.title) setErrors(prev => ({ ...prev, title: "" }));
             }}
             placeholder="Enter book title"
-            className={`w-full p-2 rounded-md bg-gray-800 border ${
-              errors.title ? 'border-red-500' : 'border-gray-600'
-            } text-gray-100 focus:border-blue-500 focus:outline-none`}
+            className={`w-full p-2 rounded-md bg-card border ${
+              errors.title ? 'border-destructive' : 'border-input'
+            } text-foreground focus:border-primary focus:outline-none`}
           />
           {errors.title && (
-            <p className="text-red-400 text-sm mt-1">{errors.title}</p>
+            <p className="text-destructive text-sm mt-1">{errors.title}</p>
           )}
         </Field>
 
@@ -157,12 +150,12 @@ export default function BookForm({
               if (errors.author) setErrors(prev => ({ ...prev, author: "" }));
             }}
             placeholder="Enter author's name"
-            className={`w-full p-2 rounded-md bg-gray-800 border ${
-              errors.author ? 'border-red-500' : 'border-gray-600'
-            } text-gray-100 focus:border-blue-500 focus:outline-none`}
+            className={`w-full p-2 rounded-md bg-card border ${
+              errors.author ? 'border-destructive' : 'border-input'
+            } text-foreground focus:border-primary focus:outline-none`}
           />
           {errors.author && (
-            <p className="text-red-400 text-sm mt-1">{errors.author}</p>
+            <p className="text-destructive text-sm mt-1">{errors.author}</p>
           )}
         </Field>
 
@@ -170,13 +163,13 @@ export default function BookForm({
           <FieldLabel>Subject(s) *</FieldLabel>
           <SubjectsCombobox
             selectedSubjects={subjects}
-            onChange={(newsubjects) => {
-              setsubjects(newsubjects);
+            onChange={(newSubjects) => {
+              setSubjects(newSubjects);
               if (errors.subjects) setErrors(prev => ({ ...prev, subjects: "" }));
             }}
           />
           {errors.subjects && (
-            <p className="text-red-400 text-sm mt-1">{errors.subjects}</p>
+            <p className="text-destructive text-sm mt-1">{errors.subjects}</p>
           )}
         </Field>
 
@@ -190,12 +183,12 @@ export default function BookForm({
               if (errors.publisher) setErrors(prev => ({ ...prev, publisher: "" }));
             }}
             placeholder="Enter publisher name"
-            className={`w-full p-2 rounded-md bg-gray-800 border ${
-              errors.publisher ? 'border-red-500' : 'border-gray-600'
-            } text-gray-100 focus:border-blue-500 focus:outline-none`}
+            className={`w-full p-2 rounded-md bg-card border ${
+              errors.publisher ? 'border-destructive' : 'border-input'
+            } text-foreground focus:border-primary focus:outline-none`}
           />
           {errors.publisher && (
-            <p className="text-red-400 text-sm mt-1">{errors.publisher}</p>
+            <p className="text-destructive text-sm mt-1">{errors.publisher}</p>
           )}
         </Field>
 
@@ -211,12 +204,12 @@ export default function BookForm({
             placeholder="e.g., 2024"
             min="1000"
             max={new Date().getFullYear()}
-            className={`w-full p-2 rounded-md bg-gray-800 border ${
-              errors.year ? 'border-red-500' : 'border-gray-600'
-            } text-gray-100 focus:border-blue-500 focus:outline-none [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none`}
+            className={`w-full p-2 rounded-md bg-card border ${
+              errors.year ? 'border-destructive' : 'border-input'
+            } text-foreground focus:border-primary focus:outline-none [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none`}
           />
           {errors.year && (
-            <p className="text-red-400 text-sm mt-1">{errors.year}</p>
+            <p className="text-destructive text-sm mt-1">{errors.year}</p>
           )}
         </Field>
 
@@ -231,12 +224,12 @@ export default function BookForm({
             }}
             min={0}
             placeholder="Enter quantity"
-            className={`w-full p-2 rounded-md bg-gray-800 border ${
-              errors.quantity ? 'border-red-500' : 'border-gray-600'
-            } text-gray-100 focus:border-blue-500 focus:outline-none [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none`}
+            className={`w-full p-2 rounded-md bg-card border ${
+              errors.quantity ? 'border-destructive' : 'border-input'
+            } text-foreground focus:border-primary focus:outline-none [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none`}
           />
           {errors.quantity && (
-            <p className="text-red-400 text-sm mt-1">{errors.quantity}</p>
+            <p className="text-destructive text-sm mt-1">{errors.quantity}</p>
           )}
         </Field>
 
@@ -250,14 +243,14 @@ export default function BookForm({
               if (errors.coverUrl) setErrors(prev => ({ ...prev, coverUrl: "" }));
             }}
             placeholder="https://example.com/book-cover.jpg"
-            className={`w-full p-2 rounded-md bg-gray-800 border ${
-              errors.coverUrl ? 'border-red-500' : 'border-gray-600'
-            } text-gray-100 focus:border-blue-500 focus:outline-none`}
+            className={`w-full p-2 rounded-md bg-card border ${
+              errors.coverUrl ? 'border-destructive' : 'border-input'
+            } text-foreground focus:border-primary focus:outline-none`}
           />
           {errors.coverUrl && (
-            <p className="text-red-400 text-sm mt-1">{errors.coverUrl}</p>
+            <p className="text-destructive text-sm mt-1">{errors.coverUrl}</p>
           )}
-          <p className="text-gray-400 text-sm mt-1">
+          <p className="text-muted-foreground text-sm mt-1">
             Provide a direct link to the book cover image
           </p>
         </Field>
@@ -268,7 +261,7 @@ export default function BookForm({
             onImageChange={handleImageChange}
             imagePreview={imagePreview}
           />
-          <p className="text-gray-400 text-sm mt-1">
+          <p className="text-muted-foreground text-sm mt-1">
             Upload an image file for future use (not currently sent to server)
           </p>
         </Field>
@@ -278,7 +271,7 @@ export default function BookForm({
         <button
           type="submit"
           disabled={isSubmitting}
-          className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-md font-medium transition disabled:opacity-50 disabled:cursor-not-allowed"
+          className="bg-primary hover:bg-primary/90 text-foreground px-6 py-2 rounded-md font-medium transition disabled:opacity-50 disabled:cursor-not-allowed"
         >
           {isSubmitting ? loadingText : buttonText}
         </button>
@@ -287,7 +280,7 @@ export default function BookForm({
             type="button"
             onClick={onCancel}
             disabled={isSubmitting}
-            className="bg-gray-700 hover:bg-gray-600 text-white px-6 py-2 rounded-md font-medium transition disabled:opacity-50 disabled:cursor-not-allowed"
+            className="bg-muted hover:bg-muted text-foreground px-6 py-2 rounded-md font-medium transition disabled:opacity-50 disabled:cursor-not-allowed"
           >
             Cancel
           </button>

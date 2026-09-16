@@ -69,9 +69,9 @@ const PageControl: React.FC<PageControlProps> = ({ page, totalPages, onPageChang
       <button
         onClick={handlePrevious}
         disabled={page === 1}
-        className="px-4 py-2 text-sm font-medium border border-gray-600 rounded-lg 
-                   disabled:opacity-30 disabled:cursor-not-allowed 
-                   hover:bg-gray-700 hover:text-white transition-all 
+        className="px-4 py-2 text-sm font-medium border border-muted rounded-lg 
+                   disabled:opacity-30 disabled:cursor-not-allowed bg-card
+                   hover:bg-secondary hover:text-primary-foreground transition-all 
                    duration-200 cursor-pointer select-none"
         aria-label="Previous page"
       >
@@ -84,7 +84,7 @@ const PageControl: React.FC<PageControlProps> = ({ page, totalPages, onPageChang
           pageNum === '...' ? (
             <span
               key={`ellipsis-${index}`}
-              className="px-3 py-2 text-gray-400 select-none"
+              className="px-3 py-2 text-muted-foreground select-none"
             >
               ...
             </span>
@@ -94,8 +94,8 @@ const PageControl: React.FC<PageControlProps> = ({ page, totalPages, onPageChang
               onClick={() => handlePageClick(pageNum as number)}
               className={`px-3 py-2 text-sm font-medium rounded-lg transition-all duration-200 select-none
                 ${page === pageNum
-                  ? 'bg-blue-600 text-white'
-                  : 'border border-gray-600 hover:bg-gray-700 hover:text-white'
+                  ? 'bg-primary text-primary-foreground'
+                  : 'border border-card hover:bg-secondary hover:text-primary-foreground'
                 }`}
               aria-label={`Go to page ${pageNum}`}
               aria-current={page === pageNum ? 'page' : undefined}
@@ -110,9 +110,9 @@ const PageControl: React.FC<PageControlProps> = ({ page, totalPages, onPageChang
       <button
         onClick={handleNext}
         disabled={page === totalPages}
-        className="px-4 py-2 text-sm font-medium border border-gray-600 rounded-lg 
-                   disabled:opacity-30 disabled:cursor-not-allowed 
-                   hover:bg-gray-700 hover:text-white transition-all 
+        className="px-4 py-2 text-sm font-medium border border-card rounded-lg 
+                   disabled:opacity-30 disabled:cursor-not-allowed bg-card
+                   hover:bg-secondary hover:text-primary-foreground transition-all 
                    duration-200 cursor-pointer select-none"
         aria-label="Next page"
       >

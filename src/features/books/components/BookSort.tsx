@@ -20,8 +20,8 @@ const BookSort: React.FC<BookSortProps> = ({ onSort, currentSort }) => {
     <div className="relative">
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="px-4 py-2 bg-gray-800 border border-gray-600 rounded-lg 
-                   text-white hover:bg-gray-700 transition-colors flex items-center gap-2 select-none"
+        className="px-4 py-2 bg-card border border-input rounded-lg 
+                   text-secondary-foreground hover:bg-secondary transition-colors flex items-center gap-2 select-none"
       >
         {currentLabel}
         <svg 
@@ -40,15 +40,15 @@ const BookSort: React.FC<BookSortProps> = ({ onSort, currentSort }) => {
             className="fixed inset-0 z-10" 
             onClick={() => setIsOpen(false)}
           />
-          <div className="absolute top-full mt-2 left-0 bg-gray-800 border border-gray-600 
+          <div className="absolute top-full mt-2 left-0 bg-card border border-input 
                          rounded-lg shadow-lg z-20 min-w-[200px]">
             {sortOptions.map((option) => (
               <button
                 key={option.value}
                 onClick={() => handleSelect(option.value)}
-                className={`w-full text-left px-4 py-2 hover:bg-gray-700 transition-colors
+                className={`w-full text-left px-4 py-2 hover:bg-muted transition-colors
                            first:rounded-t-lg last:rounded-b-lg
-                           ${currentSort === option.value ? 'bg-gray-700 text-blue-400' : 'text-white'}`}
+                           ${currentSort === option.value ? 'bg-muted text-primary' : 'text-foreground'}`}
               >
                 {option.label}
               </button>

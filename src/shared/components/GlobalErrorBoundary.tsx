@@ -34,13 +34,13 @@ class GlobalErrorBoundary extends React.Component<
   render() {
     if (this.state.hasError) {
       return (
-        <div className="flex flex-col items-center justify-center h-screen text-center">
-          <p className="text-gray-400 text-3xl font-semibold mb-3 py-10">
+        <div className="flex flex-col items-center justify-center h-screen text-center bg-background">
+          <p className="text-muted-foreground text-3xl font-semibold mb-3 py-10">
             Something went wrong. Please try reloading the page.
           </p>
           <button
             onClick={this.handleRetry}
-            className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition"
+            className="bg-primary text-primary-foreground px-4 py-2 rounded-lg hover:bg-primary/90 transition"
           >
             Reload Page
           </button>

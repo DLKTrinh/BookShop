@@ -59,13 +59,13 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
     };
 
     return (
-        <div className="min-h-screen bg-gray-900 text-white">
+        <div className="min-h-screen bg-background text-foreground">
             <Header username={user?.username ?? "User"} toggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)} />
             <div className="flex pt-16">
                 <Sidebar isOpen={isSidebarOpen} onLogout={handleLogout} isAdmin={user?.role === "admin"} />
 
                 <main
-                className={`flex-1 p-6 bg-gray-900 transition-all duration-300 ${
+                className={`flex-1 p-6 bg-background transition-all duration-300 ${
                     isSidebarOpen ? "ml-60" : "ml-15"
                 }`}
                 >

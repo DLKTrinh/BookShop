@@ -28,11 +28,11 @@ const BookCard: React.FC<BookCardProps> = ({
             </div>
             <div className="py-1 px-3 text-center flex flex-col justify-between h-20">
                 <div className="flex-1 flex items-center justify-center">
-                    <h3 className="text-gray-200 font-medium line-clamp-2 leading-snug">
+                    <h3 className="text-card-foreground font-medium line-clamp-2 leading-snug">
                         {title}
                     </h3>
                 </div>
-                <p className="text-gray-400 text-sm">{author}</p>
+                <p className="text-muted-foreground text-sm">{author}</p>
             </div>
         </>
     );
@@ -40,7 +40,7 @@ const BookCard: React.FC<BookCardProps> = ({
     // If selectable (delete mode)
     if (isSelectable) {
         return (
-            <div className="block bg-gray-800 rounded-xl overflow-hidden shadow-md border border-gray-700 select-none">
+            <div className="block bg-card rounded-xl overflow-hidden shadow-md border border-border select-none">
                 {cardContent}
             </div>
         );
@@ -51,7 +51,7 @@ const BookCard: React.FC<BookCardProps> = ({
         <Link
             to={`/books/${id}`}
             state={{ from: location.pathname + location.search }}
-            className="block bg-gray-800 rounded-xl overflow-hidden shadow-md hover:shadow-lg transition-transform transform hover:-translate-y-1 border border-gray-700 select-none"
+            className="block bg-border rounded-xl overflow-hidden shadow-md hover:shadow-lg transition-transform transform hover:-translate-y-1 border border-border select-none"
         >
             {cardContent}
         </Link>

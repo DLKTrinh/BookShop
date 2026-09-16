@@ -5,7 +5,7 @@ export default function AddBookCard() {
   return (
     <Link
       to="/books/new"
-      className="block rounded-xl overflow-hidden shadow-md hover:shadow-lg transition-transform transform hover:-translate-y-1 border-4 border-dashed border-gray-500 text-gray-400 hover:border-gray-300 hover:text-gray-300"
+      className="block rounded-xl overflow-hidden shadow-md hover:shadow-lg transition-transform transform hover:-translate-y-1 border-4 border-dashed border-muted text-muted-foreground hover:border-accent-foreground hover:text-accent-foreground"
     >
       {/* Match the same aspect ratio as BookCard */}
       <div className="relative aspect-[2/3] w-full flex items-center justify-center">

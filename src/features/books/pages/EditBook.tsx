@@ -12,7 +12,11 @@ const EditBook: React.FC = () => {
   const updateBookMutation = useUpdateBook();
 
   const handleSubmit = async (data: any) => {
-    await updateBookMutation.mutateAsync({ id: id!, data })
+    // mutateAsync, not mutate — same reasoning as AddNewBook.tsx: BookForm
+    // awaits this function and invalidates the 'subjects' query right after,
+    // so this needs to genuinely wait for the server to confirm the update
+    // before that invalidation fires.
+    await updateBookMutation.mutateAsync({ id: id!, data });
     navigate(location.state?.from ?? `/books/${id}`);
   };
 
@@ -24,7 +28,7 @@ const EditBook: React.FC = () => {
     return (
       <Layout>
         <div className="flex justify-center items-center h-[70vh]">
-          <p className="text-2xl text-gray-300 animate-pulse">Loading book...</p>
+          <p className="text-2xl text-muted-foreground animate-pulse">Loading book...</p>
         </div>
       </Layout>
     );
@@ -34,7 +38,7 @@ const EditBook: React.FC = () => {
     return (
       <Layout>
         <div className="flex justify-center items-center h-[70vh]">
-          <p className="text-2xl text-red-400">Book not found</p>
+          <p className="text-2xl text-destructive">Book not found</p>
         </div>
       </Layout>
     );
@@ -44,13 +48,13 @@ const EditBook: React.FC = () => {
     <Layout>
       <div className="max-w-3xl mx-auto">
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-white mb-2">Edit Book</h1>
-          <p className="text-gray-400">Update book information</p>
+          <h1 className="text-3xl font-bold text-foreground mb-2">Edit Book</h1>
+          <p className="text-muted-foreground">Update book information</p>
         </div>
 
         {updateBookMutation.isError && (
-          <div className="mb-6 p-4 bg-red-900/30 border border-red-700 rounded-lg">
-            <p className="text-red-400">
+          <div className="mb-6 p-4 bg-destructive/10 border border-destructive/50 rounded-lg">
+            <p className="text-destructive">
               {updateBookMutation.error instanceof Error 
                 ? updateBookMutation.error.message 
                 : 'Failed to update book. Please try again.'}

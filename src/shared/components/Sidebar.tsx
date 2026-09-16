@@ -20,7 +20,7 @@ const NavItem: React.FC<NavItemProps> = ({ to, icon, label, isOpen }) => (
     to={to}
     className={({ isActive }) =>
       `flex items-center text-sm font-medium transition-all duration-300 rounded-lg mx-2 my-1
-       ${isActive ? "bg-blue-600 text-white" : "text-gray-400 hover:bg-gray-700 hover:text-blue-400"}
+       ${isActive ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:bg-muted hover:text-primary"}
        ${isOpen ? "px-4 py-2.5" : "p-2.5"}`
     }
   >
@@ -42,7 +42,7 @@ const NavItem: React.FC<NavItemProps> = ({ to, icon, label, isOpen }) => (
 const Sidebar: React.FC<SidebarProps> = ({ isOpen, onLogout, isAdmin }) => {
     return (
         <aside
-        className={`fixed left-0 h-[calc(100vh-4rem)] bg-gray-800 border-r border-gray-700 flex flex-col justify-between transition-all duration-300 ${
+        className={`fixed left-0 h-[calc(100vh-4rem)] bg-card border-r border-border flex flex-col justify-between transition-all duration-300 ${
             isOpen ? "w-60" : "w-15"
         }`}
         >
@@ -61,7 +61,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onLogout, isAdmin }) => {
                     onClick={() => onLogout?.()}
                     className={`
                     w-full flex items-center text-sm font-medium transition-all duration-300 rounded-lg
-                    text-gray-400 hover:text-red-500 hover:bg-gray-700
+                    text-muted-foreground hover:text-destructive hover:bg-muted
                     ${isOpen ? "px-4 py-3" : "px-[10px] py-3"}
                     `}
                     aria-label="Logout"

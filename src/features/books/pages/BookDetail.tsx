@@ -12,7 +12,7 @@ const BookDetail: React.FC = () => {
     return (
       <Layout>
         <div className="flex justify-center items-center h-[70vh]">
-          <p className="text-2xl text-gray-300 animate-pulse">Loading book details...</p>
+          <p className="text-2xl text-muted-foreground animate-pulse">Loading book details...</p>
         </div>
       </Layout>
     );
@@ -21,8 +21,8 @@ const BookDetail: React.FC = () => {
     return (
       <Layout>
         <div className="flex justify-center items-center h-[70vh]">
-          <p className="text-2xl text-red-400">Error loading book details</p>
-          <p className="text-sm text-gray-400 mt-2">{String(error)}</p>
+          <p className="text-2xl text-destructive">Error loading book details</p>
+          <p className="text-sm text-muted-foreground mt-2">{String(error)}</p>
         </div>
       </Layout>
     );
@@ -31,7 +31,7 @@ const BookDetail: React.FC = () => {
     return (
       <Layout>
         <div className="flex justify-center items-center h-[70vh]">
-          <p className="text-2xl text-gray-400">Book not found</p>
+          <p className="text-2xl text-muted-foreground">Book not found</p>
         </div>
       </Layout>
     );

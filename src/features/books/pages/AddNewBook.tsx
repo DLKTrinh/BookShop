@@ -21,8 +21,8 @@ const AddNewBook: React.FC = () => {
     <Layout>
       <div className="max-w-3xl mx-auto">
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-white mb-2">Add New Book</h1>
-          <p className="text-gray-400">Fill in the details to add a new book</p>
+          <h1 className="text-3xl font-bold text-foreground mb-2">Add New Book</h1>
+          <p className="text-muted-foreground">Fill in the details to add a new book</p>
         </div>
         
         <BookForm
