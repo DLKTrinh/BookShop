@@ -9,6 +9,10 @@ type UseBooksParams = {
   fields?: string[];
   sort?: string;
   subjects?: string[];
+  publishers?: string[];
+  authors?: string[];
+  yearMin?: number;
+  yearMax?: number;
 };
 
 export function useBooks({
@@ -18,6 +22,10 @@ export function useBooks({
   fields,
   sort,
   subjects,
+  publishers,
+  authors,
+  yearMin,
+  yearMax,
 }: UseBooksParams) {
   const debouncedSearch = useDebounce(search?.trim() ?? "", 500);
 
@@ -30,6 +38,10 @@ export function useBooks({
       fields?.join(",") ?? "",
       sort ?? "",
       subjects?.slice().sort().join(",") ?? "",
+      publishers?.slice().sort().join(",") ?? "",
+      authors?.slice().sort().join(",") ?? "",
+      yearMin ?? null,
+      yearMax ?? null,
     ],
     queryFn: () =>
       getBooks({
@@ -39,6 +51,10 @@ export function useBooks({
         fields,
         sort,
         subjects,
+        publishers,
+        authors,
+        yearMin,
+        yearMax,
       }),
     staleTime: 1000 * 60 * 5,
     gcTime: 1000 * 60 * 30,

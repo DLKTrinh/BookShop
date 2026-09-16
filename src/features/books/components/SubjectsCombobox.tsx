@@ -17,7 +17,6 @@ export default function SubjectsCombobox({ selectedSubjects, onChange }: Subject
 
   const containerRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
-  const optionRefs = useRef<(HTMLButtonElement | null)[]>([]);
 
   // Close the dropdown on outside click
   useEffect(() => {
@@ -45,9 +44,8 @@ export default function SubjectsCombobox({ selectedSubjects, onChange }: Subject
   const optionCount = filteredSubjects.length + (canAddNew ? 1 : 0);
 
   useEffect(() => {
-    optionRefs.current = [];
     setHighlightedIndex(0);
-  }, [inputValue, isOpen, canAddNew]);
+  }, [inputValue, isOpen]);
 
   const selectSubject = (subject: string) => {
     onChange([...selectedSubjects, subject]);
@@ -55,14 +53,6 @@ export default function SubjectsCombobox({ selectedSubjects, onChange }: Subject
     setHighlightedIndex(0);
     inputRef.current?.focus();
   };
-
-  useEffect(() => {
-    if (!isOpen) return;
-
-    optionRefs.current[highlightedIndex]?.scrollIntoView({
-      block: "nearest",
-    });
-  }, [highlightedIndex, isOpen]);
 
   const removeSubject = (subject: string) => {
     onChange(selectedSubjects.filter((s) => s !== subject));
@@ -78,10 +68,11 @@ export default function SubjectsCombobox({ selectedSubjects, onChange }: Subject
       setHighlightedIndex((i) => Math.max(i - 1, 0));
     } else if (e.key === "Enter") {
       e.preventDefault();
-      if (canAddNew && highlightedIndex === filteredSubjects.length) {
+      if (canAddNew && highlightedIndex === 0) {
         selectSubject(inputValue.trim());
       } else {
-        const match = filteredSubjects[highlightedIndex];
+        const matchIndex = canAddNew ? highlightedIndex - 1 : highlightedIndex;
+        const match = filteredSubjects[matchIndex];
         if (match) selectSubject(match);
       }
     } else if (e.key === "Escape") {
@@ -107,58 +98,55 @@ export default function SubjectsCombobox({ selectedSubjects, onChange }: Subject
         onFocus={() => setIsOpen(true)}
         onKeyDown={handleKeyDown}
         placeholder="Search or add a subject..."
-        className="w-full bg-gray-900 border border-gray-600 rounded-lg px-4 py-2.5 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
+        className="w-full bg-background border border-input rounded-lg px-4 py-2.5 text-foreground placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring"
       />
 
       {isOpen && (
-        <div className="absolute z-10 mt-1 w-full bg-gray-800 border border-gray-700 rounded-lg shadow-lg max-h-60 overflow-y-auto">
+        <div className="absolute z-10 mt-1 w-full bg-card border border-border rounded-lg shadow-lg max-h-60 overflow-y-auto">
           {isLoading && (
-            <div className="px-4 py-2.5 text-sm text-gray-400">Loading subjects...</div>
+            <div className="px-4 py-2.5 text-sm text-muted-foreground">Loading subjects...</div>
           )}
 
           {!isLoading && filteredSubjects.length === 0 && !canAddNew && (
-            <div className="px-4 py-2.5 text-sm text-gray-500">
+            <div className="px-4 py-2.5 text-sm text-muted-foreground">
               {query ? "No matching subjects" : "No subjects available yet"}
             </div>
           )}
-
-          {filteredSubjects.map((subject, index) => (
-            <button
-              key={subject}
-              type="button"
-              onClick={() => selectSubject(subject)}
-              ref={(el) => {
-                optionRefs.current[index] = el
-              }}
-              onMouseEnter={() => setHighlightedIndex(index)}
-              className={`w-full text-left px-4 py-2.5 text-sm transition-colors ${
-                index === highlightedIndex
-                  ? "bg-gray-700 text-white"
-                  : "text-gray-300 hover:bg-gray-700"
-              }`}
-            >
-              {subject}
-            </button>
-          ))}
 
           {canAddNew && (
             <button
               type="button"
               onClick={() => selectSubject(inputValue.trim())}
-              ref={(el) => {
-                optionRefs.current[filteredSubjects.length] = el
-              }}
-              onMouseEnter={() => setHighlightedIndex(filteredSubjects.length)}
-              className={`w-full flex items-center gap-2 text-left px-4 py-2.5 text-sm border-t border-gray-700 transition-colors ${
-                highlightedIndex === filteredSubjects.length
-                  ? "bg-gray-700 text-blue-300"
-                  : "text-blue-400 hover:bg-gray-700"
+              onMouseEnter={() => setHighlightedIndex(0)}
+              className={`w-full flex items-center gap-2 text-left px-4 py-2.5 text-sm border-b border-border transition-colors ${
+                highlightedIndex === 0
+                  ? "bg-muted text-primary"
+                  : "text-primary hover:bg-muted"
               }`}
             >
               <Plus className="w-3.5 h-3.5" />
               Add "{inputValue.trim()}" as new subject
             </button>
           )}
+
+          {filteredSubjects.map((subject, index) => {
+            const optionIndex = canAddNew ? index + 1 : index;
+            return (
+              <button
+                key={subject}
+                type="button"
+                onClick={() => selectSubject(subject)}
+                onMouseEnter={() => setHighlightedIndex(optionIndex)}
+                className={`w-full text-left px-4 py-2.5 text-sm transition-colors ${
+                  optionIndex === highlightedIndex
+                    ? "bg-muted text-foreground"
+                    : "text-muted-foreground hover:bg-muted"
+                }`}
+              >
+                {subject}
+              </button>
+            );
+          })}
         </div>
       )}
 
@@ -167,13 +155,13 @@ export default function SubjectsCombobox({ selectedSubjects, onChange }: Subject
           {selectedSubjects.map((subject) => (
             <span
               key={subject}
-              className="flex items-center gap-1 bg-blue-600 text-white text-sm font-medium rounded-full pl-3 pr-1.5 py-1"
+              className="flex items-center gap-1 bg-primary text-foreground text-sm font-medium rounded-full pl-3 pr-1.5 py-1"
             >
               {subject}
               <button
                 type="button"
                 onClick={() => removeSubject(subject)}
-                className="hover:bg-blue-700 rounded-full p-0.5"
+                className="hover:bg-primary/90 rounded-full p-0.5"
                 aria-label={`Remove ${subject}`}
               >
                 <X className="w-3 h-3" />
