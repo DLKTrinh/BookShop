@@ -21,7 +21,7 @@ export const PasswordField: React.FC<PasswordFieldProps> = ({
 }) => {
   return (
     <div>
-      <label htmlFor={id} className="block text-sm text-gray-300 mb-2">
+      <label htmlFor={id} className="block text-sm text-foreground mb-2">
         {label}
       </label>
       <input
@@ -30,11 +30,11 @@ export const PasswordField: React.FC<PasswordFieldProps> = ({
         value={value}
         onChange={onChange}
         autoComplete={autoComplete}
-        className={`w-full bg-gray-900 border rounded-lg px-4 py-2.5 text-white placeholder-gray-500 outline-none focus:ring-2 focus:ring-blue-500 ${
-          error ? "border-red-600" : "border-gray-600"
+        className={`w-full bg-input border rounded-lg px-4 py-2.5 text-foreground placeholder:text-muted-foreground outline-none focus:ring-2 focus:ring-ring ${
+          error ? "border-destructive" : "border-border"
         }`}
       />
-      {error && <p className="mt-1.5 text-sm text-red-400">{error}</p>}
+      {error && <p className="mt-1.5 text-sm text-destructive">{error}</p>}
     </div>
   );
 };

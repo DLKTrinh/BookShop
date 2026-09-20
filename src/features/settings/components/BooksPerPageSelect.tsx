@@ -19,8 +19,8 @@ export const BooksPerPageSelect: React.FC = () => {
   return (
     <div className="flex items-center justify-between">
       <div>
-        <p className="text-white font-medium">Books per page</p>
-        <p className="text-sm text-gray-400">
+        <p className="text-foreground font-medium">Books per page</p>
+        <p className="text-sm text-muted-foreground">
           Default number of books shown per page on the Books list.
         </p>
       </div>
@@ -29,9 +29,9 @@ export const BooksPerPageSelect: React.FC = () => {
         <button
           type="button"
           onClick={() => setIsOpen((v) => !v)}
-          className="flex items-center gap-2 px-4 py-2 bg-gray-900 border border-gray-600 rounded-lg
-                     text-white hover:bg-gray-700 transition-colors select-none
-                     outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 focus-visible:ring-offset-gray-800"
+          className="flex items-center gap-2 px-4 py-2 bg-secondary border border-border rounded-lg
+                     text-secondary-foreground hover:bg-accent hover:text-accent-foreground transition-colors select-none
+                     outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
         >
           {booksPerPage}
           <svg
@@ -47,7 +47,7 @@ export const BooksPerPageSelect: React.FC = () => {
         {isOpen && (
           <>
             <div className="fixed inset-0 z-10" onClick={() => setIsOpen(false)} />
-            <div className="absolute top-full right-0 mt-2 bg-gray-800 border border-gray-600 rounded-lg shadow-lg z-20 min-w-[100px] py-1">
+            <div className="absolute top-full right-0 mt-2 bg-popover text-popover-foreground border border-border rounded-lg shadow-lg z-20 min-w-[100px] py-1">
               {BOOKS_PER_PAGE_OPTIONS.map((option) => (
                 <button
                   key={option}
@@ -58,8 +58,8 @@ export const BooksPerPageSelect: React.FC = () => {
                   }}
                   className={`w-full text-left px-4 py-2 text-sm transition-colors ${
                     booksPerPage === option
-                      ? "bg-blue-600 text-white"
-                      : "text-gray-300 hover:bg-gray-700"
+                      ? "bg-primary text-primary-foreground font-medium"
+                      : "text-popover-foreground hover:bg-muted"
                   }`}
                 >
                   {option}

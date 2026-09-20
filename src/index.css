@@ -28,6 +28,19 @@
   --color-border: var(--border);
   --color-input: var(--input);
   --color-ring: var(--ring);
+
+  /* StatCard & Badge Theme Accents */
+  --color-accent-blue-bg: var(--accent-blue-bg);
+  --color-accent-blue-text: var(--accent-blue-text);
+  --color-accent-violet-bg: var(--accent-violet-bg);
+  --color-accent-violet-text: var(--accent-violet-text);
+  --color-accent-teal-bg: var(--accent-teal-bg);
+  --color-accent-teal-text: var(--accent-teal-text);
+  --color-accent-amber-bg: var(--accent-amber-bg);
+  --color-accent-amber-text: var(--accent-amber-text);
+  --color-accent-rose-bg: var(--accent-rose-bg);
+  --color-accent-rose-text: var(--accent-rose-text);
+
   --color-chart-1: var(--chart-1);
   --color-chart-2: var(--chart-2);
   --color-chart-3: var(--chart-3);

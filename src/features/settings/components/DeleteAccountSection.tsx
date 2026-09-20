@@ -52,20 +52,20 @@ export default function DeleteAccountSection() {
 
   return (
     <>
-      <div className="bg-gray-800 border border-rose-900/50 rounded-2xl p-8">
+      <div className="bg-card border border-destructive/30 rounded-2xl p-8">
         <button
           type="button"
           onClick={() => setIsOpen((v) => !v)}
-          className="w-full flex items-center justify-between gap-3 outline-none focus-visible:ring-2 focus-visible:ring-rose-500 focus-visible:ring-offset-2 focus-visible:ring-offset-gray-800 rounded-lg"
+          className="w-full flex items-center justify-between gap-3 outline-none focus-visible:ring-2 focus-visible:ring-destructive focus-visible:ring-offset-2 focus-visible:ring-offset-background rounded-lg"
         >
           <div className="flex items-center gap-3">
-            <div className="flex items-center justify-center w-10 h-10 rounded-lg bg-rose-600/15 text-rose-400">
+            <div className="flex items-center justify-center w-10 h-10 rounded-lg bg-accent-rose-bg text-accent-rose-text">
               <AlertTriangle className="w-5 h-5" />
             </div>
-            <h2 className="text-lg font-semibold text-white">Danger Zone</h2>
+            <h2 className="text-lg font-semibold text-foreground">Danger Zone</h2>
           </div>
           <svg
-            className={`w-4 h-4 text-gray-400 transition-transform ${isOpen ? "rotate-180" : ""}`}
+            className={`w-4 h-4 text-muted-foreground transition-transform ${isOpen ? "rotate-180" : ""}`}
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"
@@ -76,13 +76,13 @@ export default function DeleteAccountSection() {
 
         {isOpen && (
           <div className="mt-6">
-            <p className="text-sm text-gray-400 mb-4">
+            <p className="text-sm text-muted-foreground mb-4">
               Deleting your account is permanent and cannot be undone. Enter your password to confirm.
             </p>
 
             {error && (
-              <div className="mb-4 p-3 bg-red-900/30 border border-red-700 rounded-lg">
-                <p className="text-red-400 text-sm">{error}</p>
+              <div className="mb-4 p-3 bg-destructive/15 border border-destructive/50 rounded-lg">
+                <p className="text-destructive text-sm">{error}</p>
               </div>
             )}
 
@@ -95,17 +95,17 @@ export default function DeleteAccountSection() {
               }}
               placeholder="Enter your password"
               autoComplete="current-password"
-              className="w-full bg-gray-900 border border-gray-600 rounded-lg px-4 py-2.5 text-white
-                         placeholder-gray-500 outline-none focus:ring-2 focus:ring-rose-500 mb-4"
+              className="w-full bg-input border border-border rounded-lg px-4 py-2.5 text-foreground
+                        placeholder:text-muted-foreground outline-none focus:ring-2 focus:ring-destructive mb-4"
             />
 
             <button
               type="button"
               onClick={handleDeleteClick}
               disabled={deleteAccountMutation.isPending}
-              className="w-full bg-rose-600 hover:bg-rose-700 disabled:bg-gray-600 disabled:cursor-not-allowed
-                         text-white font-medium rounded-lg px-4 py-2.5 transition-colors
-                         outline-none focus-visible:ring-2 focus-visible:ring-rose-500 focus-visible:ring-offset-2 focus-visible:ring-offset-gray-800"
+              className="w-full bg-destructive hover:bg-destructive/90 disabled:bg-muted disabled:text-muted-foreground disabled:cursor-not-allowed
+                        text-destructive-foreground font-medium rounded-lg px-4 py-2.5 transition-colors
+                        outline-none focus-visible:ring-2 focus-visible:ring-destructive focus-visible:ring-offset-2 focus-visible:ring-offset-background"
             >
               {deleteAccountMutation.isPending ? "Deleting..." : "Delete My Account"}
             </button>
@@ -114,22 +114,22 @@ export default function DeleteAccountSection() {
       </div>
 
       <AlertDialog open={showConfirmDialog} onOpenChange={setShowConfirmDialog}>
-        <AlertDialogContent className="bg-gray-800 border-gray-700">
+        <AlertDialogContent className="bg-popover text-popover-foreground border-border">
           <AlertDialogHeader>
-            <AlertDialogTitle className="text-white">Delete your account?</AlertDialogTitle>
-            <AlertDialogDescription className="text-gray-400">
+            <AlertDialogTitle className="text-foreground">Delete your account?</AlertDialogTitle>
+            <AlertDialogDescription className="text-muted-foreground">
               This will permanently delete your account. This action cannot be undone.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel
-              className="bg-gray-700 hover:bg-gray-600 text-white border-gray-600"
+              className="bg-secondary hover:bg-secondary/80 text-secondary-foreground border-border"
               disabled={deleteAccountMutation.isPending}
             >
               Cancel
             </AlertDialogCancel>
             <AlertDialogAction
-              className="bg-rose-600 hover:bg-rose-700 text-white"
+              className="bg-destructive hover:bg-destructive/90 text-destructive-foreground"
               onClick={handleConfirmDelete}
               disabled={deleteAccountMutation.isPending}
             >

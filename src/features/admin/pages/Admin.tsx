@@ -8,17 +8,28 @@ import { useAdminStats } from "../hooks/useAdminStats";
 import StatCard from "../components/StatCard";
 import ChartCard from "../components/ChartCard";
 
-// Shared dark-theme styling for every chart's axes/grid/tooltip, so each
-// chart doesn't repeat the same six props.
-const axisColor = "#9ca3af"; // gray-400
-const gridColor = "#374151"; // gray-700
+// Chart token colors mapping directly to CSS Variables defined in index.css
+const axisColor = "var(--muted-foreground)";
+const gridColor = "var(--border)";
 const tooltipStyle = {
-  contentStyle: { backgroundColor: "#1f2937", border: "1px solid #374151", borderRadius: 8 },
-  labelStyle: { color: "#e5e7eb" },
-  itemStyle: { color: "#e5e7eb" },
+  contentStyle: { 
+    backgroundColor: "var(--card)", 
+    borderColor: "var(--border)", 
+    borderRadius: "var(--radius)",
+    color: "var(--card-foreground)"
+  },
+  labelStyle: { color: "var(--card-foreground)" },
+  itemStyle: { color: "var(--card-foreground)" },
 };
 
-const PIE_COLORS = ["#3b82f6", "#8b5cf6", "#14b8a6", "#f59e0b", "#f43f5e"];
+// Recharts Pie Colors mapping to CSS theme variables
+const PIE_COLORS = [
+  "var(--chart-1)", 
+  "var(--chart-2)", 
+  "var(--chart-3)", 
+  "var(--chart-4)", 
+  "var(--chart-5)"
+];
 
 const Admin: React.FC = () => {
   const { data, isLoading, error } = useAdminStats();
@@ -27,7 +38,7 @@ const Admin: React.FC = () => {
     return (
       <Layout>
         <div className="flex justify-center items-center h-[70vh]">
-          <p className="text-2xl text-gray-300 animate-pulse">Loading statistics...</p>
+          <p className="text-2xl text-muted-foreground animate-pulse">Loading statistics...</p>
         </div>
       </Layout>
     );
@@ -37,7 +48,7 @@ const Admin: React.FC = () => {
     return (
       <Layout>
         <div className="flex justify-center items-center h-[70vh]">
-          <p className="text-2xl text-red-400">Failed to load statistics</p>
+          <p className="text-2xl text-destructive">Failed to load statistics</p>
         </div>
       </Layout>
     );
@@ -47,8 +58,8 @@ const Admin: React.FC = () => {
     <Layout>
       <div className="max-w-7xl mx-auto">
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-white mb-2">Admin Dashboard</h1>
-          <p className="text-gray-400">An overview of everything in the database.</p>
+          <h1 className="text-3xl font-bold text-foreground mb-2">Admin Dashboard</h1>
+          <p className="text-muted-foreground">An overview of everything in the database.</p>
         </div>
 
         {/* Overview cards */}
@@ -71,7 +82,7 @@ const Admin: React.FC = () => {
                 <XAxis type="number" stroke={axisColor} fontSize={12} allowDecimals={false} />
                 <YAxis type="category" dataKey="name" stroke={axisColor} fontSize={12} width={140} />
                 <Tooltip {...tooltipStyle} cursor={false} />
-                <Bar dataKey="count" fill="#3b82f6" radius={[0, 4, 4, 0]} activeBar={{ fillOpacity: 0.8, stroke: "#3b82f6", strokeWidth: 2 }} />
+                <Bar dataKey="count" fill="var(--chart-1)" radius={[0, 4, 4, 0]} activeBar={{ fillOpacity: 0.8, stroke: "var(--chart-1)", strokeWidth: 2 }} />
               </BarChart>
             </ResponsiveContainer>
           </ChartCard>
@@ -83,7 +94,7 @@ const Admin: React.FC = () => {
                 <XAxis dataKey="name" stroke={axisColor} fontSize={11} interval={0} angle={-30} textAnchor="end" height={70} />
                 <YAxis stroke={axisColor} fontSize={12} allowDecimals={false} />
                 <Tooltip {...tooltipStyle} cursor={false} />
-                <Bar dataKey="count" fill="#8b5cf6" radius={[4, 4, 0, 0]} activeBar={{ fillOpacity: 0.8, stroke: "#8b5cf6", strokeWidth: 2 }} />
+                <Bar dataKey="count" fill="var(--chart-2)" radius={[4, 4, 0, 0]} activeBar={{ fillOpacity: 0.8, stroke: "var(--chart-2)", strokeWidth: 2 }} />
               </BarChart>
             </ResponsiveContainer>
           </ChartCard>
@@ -95,7 +106,7 @@ const Admin: React.FC = () => {
                 <XAxis dataKey="name" stroke={axisColor} fontSize={11} interval={0} angle={-30} textAnchor="end" height={70} />
                 <YAxis stroke={axisColor} fontSize={12} allowDecimals={false} />
                 <Tooltip {...tooltipStyle} cursor={false} />
-                <Bar dataKey="count" fill="#14b8a6" radius={[4, 4, 0, 0]} activeBar={{ fillOpacity: 0.8, stroke: "#14b8a6", strokeWidth: 2 }} />
+                <Bar dataKey="count" fill="var(--chart-3)" radius={[4, 4, 0, 0]} activeBar={{ fillOpacity: 0.8, stroke: "var(--chart-3)", strokeWidth: 2 }} />
               </BarChart>
             </ResponsiveContainer>
           </ChartCard>
@@ -107,7 +118,7 @@ const Admin: React.FC = () => {
                 <XAxis dataKey="label" stroke={axisColor} fontSize={12} />
                 <YAxis stroke={axisColor} fontSize={12} allowDecimals={false} />
                 <Tooltip {...tooltipStyle} cursor={false} />
-                <Bar dataKey="count" fill="#f59e0b" radius={[4, 4, 0, 0]} activeBar={{ fillOpacity: 0.8, stroke: "#f59e0b", strokeWidth: 2 }} />
+                <Bar dataKey="count" fill="var(--chart-4)" radius={[4, 4, 0, 0]} activeBar={{ fillOpacity: 0.8, stroke: "var(--chart-4)", strokeWidth: 2 }} />
               </BarChart>
             </ResponsiveContainer>
           </ChartCard>
@@ -136,7 +147,7 @@ const Admin: React.FC = () => {
                 <XAxis dataKey="month" stroke={axisColor} fontSize={12} />
                 <YAxis stroke={axisColor} fontSize={12} allowDecimals={false} />
                 <Tooltip {...tooltipStyle} />
-                <Line type="monotone" dataKey="count" stroke="#3b82f6" strokeWidth={2} dot={{ r: 3 }} />
+                <Line type="monotone" dataKey="count" stroke="var(--chart-1)" strokeWidth={2} dot={{ r: 3 }} />
               </LineChart>
             </ResponsiveContainer>
           </ChartCard>
@@ -148,7 +159,7 @@ const Admin: React.FC = () => {
                 <XAxis dataKey="month" stroke={axisColor} fontSize={12} />
                 <YAxis stroke={axisColor} fontSize={12} allowDecimals={false} />
                 <Tooltip {...tooltipStyle} />
-                <Line type="monotone" dataKey="count" stroke="#14b8a6" strokeWidth={2} dot={{ r: 3 }} />
+                <Line type="monotone" dataKey="count" stroke="var(--chart-3)" strokeWidth={2} dot={{ r: 3 }} />
               </LineChart>
             </ResponsiveContainer>
           </ChartCard>

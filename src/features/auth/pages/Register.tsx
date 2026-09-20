@@ -1,3 +1,4 @@
+// Register.tsx
 import { useState } from "react";
 import type { FormEvent } from "react";
 import { Link, useNavigate } from "react-router-dom";
@@ -31,8 +32,6 @@ const Register: React.FC = () => {
     setFieldErrors({});
     setFormError(null);
 
-    // Client-side only — confirmPassword never gets sent to the backend,
-    // it's just a UX check to catch typos before hitting the API.
     if (password !== confirmPassword) {
       setFieldErrors({ confirmPassword: "Passwords do not match" });
       return;
@@ -67,23 +66,23 @@ const Register: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-900 flex items-center justify-center px-4">
+    <div className="min-h-screen bg-background flex items-center justify-center px-4">
       <div className="w-full max-w-md">
         <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold text-white mb-2">Create your account</h1>
-          <p className="text-gray-400">Join the bookshop to start managing your library</p>
+          <h1 className="text-3xl font-bold text-foreground mb-2">Create your account</h1>
+          <p className="text-muted-foreground">Join the bookshop to start managing your library</p>
         </div>
 
-        <div className="bg-gray-800 border border-gray-700 rounded-lg p-8">
+        <div className="bg-card border border-border rounded-lg p-8">
           {formError && (
-            <div className="mb-6 p-4 bg-red-900/30 border border-red-700 rounded-lg">
-              <p className="text-red-400 text-sm">{formError}</p>
+            <div className="mb-6 p-4 bg-destructive/10 border border-destructive/50 rounded-lg">
+              <p className="text-destructive text-sm">{formError}</p>
             </div>
           )}
 
           <form onSubmit={handleSubmit} noValidate>
             <div className="mb-5">
-              <label htmlFor="username" className="block text-sm text-gray-300 mb-2">
+              <label htmlFor="username" className="block text-sm text-foreground mb-2">
                 Username
               </label>
               <input
@@ -92,18 +91,19 @@ const Register: React.FC = () => {
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
                 autoComplete="username"
-                className={`w-full bg-gray-900 border rounded-lg px-4 py-2.5 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-                  fieldErrors.username ? "border-red-600" : "border-gray-600"
+                className={`w-full bg-background border rounded-lg px-4 py-2.5 text-foreground placeholder:text-muted-foreground 
+                  focus:placeholder-transparent focus:outline-none focus:ring-2 focus:ring-ring ${
+                  fieldErrors.username ? "border-destructive" : "border-input"
                 }`}
-                placeholder="yourname"
+                placeholder="Yourname"
               />
               {fieldErrors.username && (
-                <p className="mt-1.5 text-sm text-red-400">{fieldErrors.username}</p>
+                <p className="mt-1.5 text-sm text-destructive">{fieldErrors.username}</p>
               )}
             </div>
 
             <div className="mb-5">
-              <label htmlFor="email" className="block text-sm text-gray-300 mb-2">
+              <label htmlFor="email" className="block text-sm text-foreground mb-2">
                 Email
               </label>
               <input
@@ -112,18 +112,18 @@ const Register: React.FC = () => {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 autoComplete="email"
-                className={`w-full bg-gray-900 border rounded-lg px-4 py-2.5 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-                  fieldErrors.email ? "border-red-600" : "border-gray-600"
+                className={`w-full bg-background border rounded-lg px-4 py-2.5 text-foreground placeholder:text-muted-foreground focus:placeholder-transparent focus:outline-none focus:ring-2 focus:ring-ring ${
+                  fieldErrors.email ? "border-destructive" : "border-input"
                 }`}
-                placeholder="you@example.com"
+                placeholder="You@example.com"
               />
               {fieldErrors.email && (
-                <p className="mt-1.5 text-sm text-red-400">{fieldErrors.email}</p>
+                <p className="mt-1.5 text-sm text-destructive">{fieldErrors.email}</p>
               )}
             </div>
 
             <div className="mb-5">
-              <label htmlFor="password" className="block text-sm text-gray-300 mb-2">
+              <label htmlFor="password" className="block text-sm text-foreground mb-2">
                 Password
               </label>
               <div className="relative">
@@ -133,27 +133,27 @@ const Register: React.FC = () => {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   autoComplete="new-password"
-                  className={`w-full bg-gray-900 border rounded-lg px-4 py-2.5 pr-11 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-                    fieldErrors.password ? "border-red-600" : "border-gray-600"
+                  className={`w-full bg-background border rounded-lg px-4 py-2.5 pr-11 text-foreground placeholder:text-muted-foreground focus:placeholder-transparent focus:outline-none focus:ring-2 focus:ring-ring ${
+                    fieldErrors.password ? "border-destructive" : "border-input"
                   }`}
                   placeholder="••••••••"
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword((v) => !v)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-300"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
                   aria-label={showPassword ? "Hide password" : "Show password"}
                 >
                   {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                 </button>
               </div>
               {fieldErrors.password && (
-                <p className="mt-1.5 text-sm text-red-400">{fieldErrors.password}</p>
+                <p className="mt-1.5 text-sm text-destructive">{fieldErrors.password}</p>
               )}
             </div>
 
             <div className="mb-6">
-              <label htmlFor="confirmPassword" className="block text-sm text-gray-300 mb-2">
+              <label htmlFor="confirmPassword" className="block text-sm text-foreground mb-2">
                 Confirm password
               </label>
               <input
@@ -162,24 +162,25 @@ const Register: React.FC = () => {
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
                 autoComplete="new-password"
-                className={`w-full bg-gray-900 border rounded-lg px-4 py-2.5 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-                  fieldErrors.confirmPassword ? "border-red-600" : "border-gray-600"
+                className={`w-full bg-background border rounded-lg px-4 py-2.5 text-foreground placeholder:text-muted-foreground 
+                  focus:placeholder-transparent focus:outline-none focus:ring-2 focus:ring-ring ${
+                  fieldErrors.confirmPassword ? "border-destructive" : "border-input"
                 }`}
                 placeholder="••••••••"
               />
               {fieldErrors.confirmPassword && (
-                <p className="mt-1.5 text-sm text-red-400">{fieldErrors.confirmPassword}</p>
+                <p className="mt-1.5 text-sm text-destructive">{fieldErrors.confirmPassword}</p>
               )}
             </div>
 
             <button
               type="submit"
               disabled={registerMutation.isPending}
-              className="w-full flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-600 disabled:cursor-not-allowed text-white font-medium rounded-lg px-4 py-2.5 transition-colors"
+              className="w-full flex items-center justify-center gap-2 bg-primary hover:bg-primary/90 disabled:bg-muted disabled:text-muted-foreground disabled:cursor-not-allowed text-primary-foreground font-medium rounded-lg px-4 py-2.5 transition-colors"
             >
               {registerMutation.isPending ? (
                 <>
-                  <span className="inline-block w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                  <span className="inline-block w-4 h-4 border-2 border-primary-foreground border-t-transparent rounded-full animate-spin" />
                   Creating account...
                 </>
               ) : (
@@ -189,9 +190,9 @@ const Register: React.FC = () => {
           </form>
         </div>
 
-        <p className="text-center text-gray-400 mt-6">
+        <p className="text-center text-muted-foreground mt-6">
           Already have an account?{" "}
-          <Link to="/login" className="text-blue-400 hover:text-blue-300 font-medium">
+          <Link to="/login" className="text-primary hover:underline font-medium">
             Sign in
           </Link>
         </p>

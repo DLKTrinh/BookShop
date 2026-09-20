@@ -12,8 +12,8 @@ const RequireAuth: React.FC<RequireAuthProps> = ({ children, role }) => {
 
   if (isInitializing) {
     return (
-      <div className="min-h-screen bg-gray-900 flex items-center justify-center">
-        <span className="inline-block w-6 h-6 border-2 border-gray-400 border-t-transparent rounded-full animate-spin" />
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <span className="inline-block w-6 h-6 border-2 border-primary border-t-transparent rounded-full animate-spin" />
       </div>
     );
   }

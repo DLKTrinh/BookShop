@@ -13,10 +13,10 @@ const Dashboard: React.FC = () => {
     <Layout>
       <div className="max-w-6xl mx-auto">
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-white mb-2">
+          <h1 className="text-3xl font-bold text-foreground mb-2">
             Welcome back{user?.username ? `, ${user.username}` : ""}
           </h1>
-          <p className="text-gray-400">Here's where you can get to from here.</p>
+          <p className="text-muted-foreground">Here's where you can get to from here.</p>
         </div>
 
         <div className={`grid grid-cols-1 sm:grid-cols-2 ${gridCols} gap-6`}>

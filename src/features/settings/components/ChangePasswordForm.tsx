@@ -63,8 +63,8 @@ export const ChangePasswordForm: React.FC = () => {
   return (
     <div className="mt-6">
       {formError && (
-        <div className="mb-6 p-4 bg-red-900/30 border border-red-700 rounded-lg">
-          <p className="text-red-400 text-sm">{formError}</p>
+        <div className="mb-6 p-4 bg-destructive/15 border border-destructive/50 rounded-lg">
+          <p className="text-destructive text-sm">{formError}</p>
         </div>
       )}
 
@@ -102,8 +102,8 @@ export const ChangePasswordForm: React.FC = () => {
         <button
           type="button"
           onClick={() => setShowPasswords((v) => !v)}
-          className="flex items-center gap-1.5 text-sm text-gray-400 hover:text-white
-                     outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 focus-visible:ring-offset-gray-800 rounded"
+          className="flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground
+                    outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background rounded"
         >
           {showPasswords ? <EyeOff className="w-3.5 h-3.5" /> : <Eye className="w-3.5 h-3.5" />}
           {showPasswords ? "Hide" : "Show"} passwords
@@ -112,8 +112,8 @@ export const ChangePasswordForm: React.FC = () => {
         <button
           type="submit"
           disabled={changePasswordMutation.isPending}
-          className="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-gray-600 disabled:cursor-not-allowed text-white font-medium rounded-lg px-4 py-2.5 transition-colors
-                     outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 focus-visible:ring-offset-gray-800"
+          className="w-full bg-primary hover:bg-primary/90 text-primary-foreground disabled:bg-muted disabled:text-muted-foreground disabled:cursor-not-allowed font-medium rounded-lg px-4 py-2.5 transition-colors
+                    outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
         >
           {changePasswordMutation.isPending ? "Changing..." : "Change Password"}
         </button>
